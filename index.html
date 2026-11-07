@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>다쏜다 전주장동점 | 송천동·장동 찾아가는 통신비 절감 상담</title>
-<meta name="description" content="새는 돈 막아주는 통신비 절감 컨설팅. 전주 송천동·장동·혁신도시 휴대폰·인터넷·가전렌탈 찾아가는 상담. 당근 보고 왔다고 하시면 사은품 추가!">
+<title>다쏜다 전주장동점 | 혁신도시·송천동 찾아가는 통신비 절감 상담</title>
+<meta name="description" content="새는 돈 막아주는 통신비 절감 컨설팅. 전주 혁신도시·송천동 휴대폰·인터넷·가전렌탈 찾아가는 상담. 당근 보고 왔다고 하시면 사은품 추가!">
 <!-- 카톡·당근에 링크 붙였을 때 보이는 미리보기 -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="다쏜다 전주장동점 · 당근 이웃 전용 혜택">
@@ -24,7 +24,7 @@ const SETTINGS = {
   phone     : "010-2069-5220",   // ★ 매장 전화번호 (전화 버튼)
   smsPhone  : "010-2069-5220",   // ★ 상담 문자 받을 휴대폰 번호 (신청서·문자 버튼)
   manager   : "방극률",           // 점장 이름
-  area      : "송천동·장동·혁신도시", // 주로 상담하는 동네 (맨 위 띠·첫 화면에 표시)
+  area      : "혁신도시·송천동", // 주로 상담하는 동네 (맨 위 띠·첫 화면에 표시)
   kakaoUrl  : "https://pf.kakao.com/_nqxmjX/chat",     // 카카오톡 채널 1:1 상담
   kakaoAdd  : "https://pf.kakao.com/_nqxmjX/friend",   // 카카오톡 채널 친구 추가
   mapUrl    : "https://map.kakao.com/?q=전주시 덕진구 사근1길 73", // 길찾기 버튼
@@ -159,9 +159,9 @@ body.edit .ph .tag{display:block}
 .promise span::before{content:"✓ ";color:var(--carrot);font-weight:900}
 /* 계산기 */
 .calc{background:#fff;border:2px solid var(--carrot);border-radius:22px;padding:20px 18px;margin-top:4px}
-.calc .row2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
-.calc label{font-size:12.5px;font-weight:700;color:var(--ink2);display:block;margin-bottom:5px}
-.calc input{width:100%;padding:13px;border-radius:12px;border:1.5px solid #E8E2DC;background:#FCFAF8;font-size:17px;font-weight:700;outline:none}
+.calc .row2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;align-items:end}
+.calc label{font-size:12px;font-weight:700;color:var(--ink2);display:block;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.calc input{width:100%;min-width:0;padding:13px;border-radius:12px;border:1.5px solid #E8E2DC;background:#FCFAF8;font-size:17px;font-weight:700;outline:none}
 .calc input:focus{border-color:var(--carrot)}
 .calc .res{margin-top:14px;background:var(--carrot-l);border-radius:14px;padding:14px;text-align:center}
 .calc .res small{display:block;font-size:12.5px;color:var(--ink2)}
@@ -222,7 +222,7 @@ body.edit .ph .tag{display:block}
 .step span{font-size:14px;color:var(--ink2)}
 
 /* 매장 사진 */
-.gallery{display:grid;grid-template-columns:1.25fr 1fr;gap:8px;margin-top:16px}
+.gallery{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
 .gallery .ph{border-radius:16px;aspect-ratio:3/4;--es:48px}
 .gallery .ph:first-child{--fb:linear-gradient(160deg,#FFE0C7,#FF9A55)}
 .gallery .ph:last-child{--fb:linear-gradient(160deg,#E7E9EF,#A9B0C0)}
@@ -299,7 +299,7 @@ body.edit .editpanel{display:block}
 <body>
 <div class="wrap">
 
-  <div class="topbar">🥕 당근 이웃 전용 · 전주 <span class="js-area">송천동·장동·혁신도시</span> 찾아가는 상담</div>
+  <div class="topbar">🥕 당근 이웃 전용 · 전주 <span class="js-area">혁신도시·송천동</span> 찾아가는 상담</div>
 
   <!-- 1. 첫 화면 -->
   <header class="hero">
@@ -351,7 +351,7 @@ body.edit .editpanel{display:block}
     <div class="calc">
       <p class="lead" style="margin-top:0">지난달 요금 고지서 금액을 넣어 보세요.</p>
       <div class="row2">
-        <div><label for="cPhone">휴대폰 요금 (월, 가족 합계)</label><input id="cPhone" inputmode="numeric" placeholder="예: 120000"></div>
+        <div><label for="cPhone">휴대폰 (월, 가족 합계)</label><input id="cPhone" inputmode="numeric" placeholder="예: 120000"></div>
         <div><label for="cNet">인터넷·TV (월)</label><input id="cNet" inputmode="numeric" placeholder="예: 45000"></div>
       </div>
       <div class="res"><small>2년(24개월) 동안 내는 돈</small><b id="cTotal">0원</b><span>이 돈을 줄일 수 있는지 무료로 따져 봐 드려요</span></div>
@@ -479,7 +479,7 @@ body.edit .editpanel{display:block}
       <h2 class="js-name">다쏜다 전주장동점</h2>
       <dl>
         <div><dt>상담 장소</dt><dd class="js-addr"></dd></div>
-        <div><dt>상담 지역</dt><dd><span class="js-area">송천동·장동·혁신도시</span> (찾아가는 상담 가능)</dd></div>
+        <div><dt>상담 지역</dt><dd><span class="js-area">혁신도시·송천동</span> (찾아가는 상담 가능)</dd></div>
         <div><dt>영업시간</dt><dd class="js-hours"></dd></div>
         <div><dt>전화</dt><dd class="js-phone"></dd></div>
       </dl>
