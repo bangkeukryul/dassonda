@@ -6,6 +6,10 @@
 <meta name="robots" content="noindex, nofollow">
 <title>다쏜다 시세 도우미</title>
 <meta name="theme-color" content="#20263A">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="mobile-web-app-capable" content="yes">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
@@ -121,6 +125,7 @@ label.f{display:block;font-size:12.5px;font-weight:700;color:var(--ink2);margin:
 .rawt td{padding:6px 2px;border-bottom:1px solid #F3EFEB;text-align:center}
 .rawt td:first-child{text-align:left;font-weight:700}
 .rawt td b{color:var(--od)}
+.dataBox{margin-top:12px;background:#F4F2EF;border-radius:12px;padding:10px 12px;font-size:13.5px;font-weight:700;color:var(--ink2)}
 .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;background:var(--ink);color:#fff;font-size:14px;font-weight:600;padding:12px 16px;border-radius:12px;max-width:90%;text-align:center;transition:.3s;pointer-events:none;z-index:50}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 </style>
@@ -132,6 +137,8 @@ label.f{display:block;font-size:12.5px;font-weight:700;color:var(--ink2);margin:
   <div class="box">
     <h2>🔒 다쏜다 시세 도우미</h2>
     <p class="hint">본사 단가가 들어 있어서 비밀번호로 잠가 두었어요. 이 폰에서 한 번만 넣으면 기억해요.</p>
+    <div class="dataBox" id="dataBox"></div>
+    <label class="btn btn-o" style="margin-top:10px">📂 자료 파일 넣기<input type="file" class="dataFile" hidden></label>
     <input id="pw" type="password" autocomplete="current-password" placeholder="비밀번호">
     <div class="err" id="pwErr"></div>
     <button class="btn btn-n" id="unlock">열기</button>
@@ -216,7 +223,8 @@ label.f{display:block;font-size:12.5px;font-weight:700;color:var(--ink2);margin:
       <div class="card">
         <div class="h">자료 정보</div>
         <p class="hint" id="srcInfo"></p>
-        <button class="btn btn-w" id="reset" style="margin-top:10px">설정 처음으로 되돌리기</button>
+        <label class="btn btn-o" style="margin-top:10px">📂 새 자료 파일 넣기<input type="file" class="dataFile" hidden></label>
+        <button class="btn btn-w" id="reset" style="margin-top:8px">설정 처음으로 되돌리기</button>
         <button class="btn btn-w" id="logout" style="margin-top:8px">이 폰에서 비밀번호 지우기</button>
       </div>
     </section>
@@ -237,7 +245,7 @@ const f1=n=>(Math.round(n*10)/10).toLocaleString('ko-KR');
 /* ---------- 암호 풀기 ---------- */
 const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 async function decrypt(pw){
-  const enc=window.__ENC || await (await fetch('data.enc?v='+Date.now(),{cache:'no-store'})).json();
+  const enc=LS.get('dsd_enc',null) || window.__ENC; if(!enc) throw new Error('nodata');
   const km=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveKey']);
   const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt:b64(enc.salt),iterations:enc.iter,hash:'SHA-256'},km,{name:'AES-GCM',length:256},false,['decrypt']);
   const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:b64(enc.iv)},key,b64(enc.ct));
@@ -245,11 +253,24 @@ async function decrypt(pw){
 }
 async function tryUnlock(pw,quiet){
   try{ D=await decrypt(pw); LS.set('dsd_pw',pw); $('#lock').hidden=true; $('#app').hidden=false; init(); }
-  catch(e){ if(!quiet) $('#pwErr').textContent=(e&&e.name==='OperationError')?'비밀번호가 달라요':'자료를 불러오지 못했어요. 인터넷을 확인해 주세요'; }
+  catch(e){ if(!quiet) $('#pwErr').textContent=(e&&e.message==='nodata')?'먼저 자료 파일을 넣어 주세요':(e&&e.name==='OperationError')?'비밀번호가 달라요':'자료를 열지 못했어요'; }
 }
 $('#unlock').addEventListener('click',()=>tryUnlock($('#pw').value.trim()));
 $('#pw').addEventListener('keydown',e=>{if(e.key==='Enter')tryUnlock($('#pw').value.trim())});
+function showDataBox(){ const e=LS.get('dsd_enc',null)||window.__ENC; $('#dataBox').textContent = e ? `📦 저장된 자료: ${e.label||'있음'}` : '📦 저장된 자료가 없어요. 받은 자료 파일을 넣어 주세요.'; }
+showDataBox();
+// 자료 파일 넣기 (이 폰 안에만 저장돼요)
+$$('.dataFile').forEach(inp=>inp.addEventListener('change',async e=>{
+  const f=e.target.files[0]; e.target.value=''; if(!f) return;
+  try{
+    const j=JSON.parse(await f.text());
+    if(!j.salt||!j.iv||!j.ct) throw 0;
+    LS.set('dsd_enc',j); showDataBox(); toast(`자료를 넣었어요 (${j.label||f.name})`);
+    const pw=LS.get('dsd_pw',null)||$('#pw').value.trim(); if(pw) tryUnlock(pw); else $('#pw').focus();
+  }catch(err){ toast('다쏜다 자료 파일이 아니에요'); }
+}));
 const saved=LS.get('dsd_pw',null); if(saved) tryUnlock(saved,true);
+if('serviceWorker' in navigator && location.protocol==='https:') navigator.serviceWorker.register('sw.js').catch(()=>{});
 
 /* ---------- 상태 ---------- */
 let D=null, S=null, cur='S26';
@@ -364,7 +385,7 @@ function renderPoster(){
     rows+=`<tr class="gh"><th>${esc(gname==='갤럭시'?'휴대폰 모델':gname)}</th><th>출고가</th>${CARR.map(()=>'<th>번호이동</th><th>기기변경</th>').join('')}</tr>`;
     sel.filter(m=>m.group===gname).forEach(m=>{
       const qs=CARR.flatMap(c=>['MNP','기변'].map(t=>quote(c,m.id,t)));
-      const vals=qs.map(q=>q?showPrice(q.price):null), codes=qs.map(q=>q?q.o.code:'');
+      const vals=qs.map(q=>q?showPrice(q.price):null), codes=qs.map(q=>q?`${q.o.code} · 이익${f1(q.mg)}`:'');
       const min=Math.min(...vals.filter(v=>v!=null));
       rows+=`<tr><td class="nm">${esc(m.name)}</td><td class="rl">${Math.round(release(m)*10000).toLocaleString('ko-KR')}</td>`+
         vals.map((v,i)=>v==null?`<td class="v na">문의</td>`:`<td class="v ${v===min?'best':''} ${v<0?'neg':''}">${f1(v)}${CODEVIEW?`<span class="cd">${esc(codes[i])}</span>`:''}</td>`).join('')+'</tr>';
