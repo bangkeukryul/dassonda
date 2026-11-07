@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>다쏜다 전주장동점 | 송천동·장동 찾아가는 통신비 절감 상담</title>
+<meta name="description" content="새는 돈 막아주는 통신비 절감 컨설팅. 전주 송천동·장동·혁신도시 휴대폰·인터넷·가전렌탈 찾아가는 상담. 당근 보고 왔다고 하시면 사은품 추가!">
+<!-- 카톡·당근에 링크 붙였을 때 보이는 미리보기 -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="다쏜다 전주장동점 · 당근 이웃 전용 혜택">
+<meta property="og:description" content="휴대폰·인터넷 바꿀 때, 동네에서 꼼꼼하게. 당근 보고 왔다고 하시면 사은품 추가!">
+<!-- ★ 사이트 올린 뒤 share.jpg 앞에 사이트 주소를 붙여 주세요. 예: https://bangkeukryul.github.io/dasonda/share.jpg -->
+<meta property="og:image" content="share.jpg">
+<meta name="theme-color" content="#FF6F0F">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+
+<script>
+/* =====================================================================
+   ★★★ 여기만 고치면 됩니다 (사장님 수정 칸) ★★★
+   따옴표 " " 안의 글자만 바꾸세요. 따옴표·쉼표는 지우지 마세요.
+   ===================================================================== */
+const SETTINGS = {
+  storeName : "다쏜다 전주장동점",
+  phone     : "010-2069-5220",   // ★ 매장 전화번호 (전화 버튼)
+  smsPhone  : "010-2069-5220",   // ★ 상담 문자 받을 휴대폰 번호 (신청서·문자 버튼)
+  manager   : "방극률",           // 점장 이름
+  area      : "송천동·장동·혁신도시", // 주로 상담하는 동네 (맨 위 띠·첫 화면에 표시)
+  kakaoUrl  : "https://pf.kakao.com/_nqxmjX/chat",     // 카카오톡 채널 1:1 상담
+  kakaoAdd  : "https://pf.kakao.com/_nqxmjX/friend",   // 카카오톡 채널 친구 추가
+  mapUrl    : "https://map.kakao.com/?q=전주시 덕진구 사근1길 73", // 길찾기 버튼
+  daangnUrl : "",                 // 당근 비즈프로필 주소 (넣으면 '당근 후기 보기' 버튼이 생겨요)
+  address   : "전북 전주시 덕진구 사근1길 73 (송천동 상담 사무실)", // ★ 손님이 실제로 찾아오는 곳
+  awards    : "다쏜다 브랜드 · 2026 대한민국 베스트 브랜드 대상 · 2025 소비자만족지수 1위", // 비우면 숨김
+  approvalUrl: "",                // 사전승낙 인증 확인 링크 (본사에서 받으면 넣기) — 넣으면 '인증 확인' 버튼 생김
+  approval  : "",                 // ★ 사전승낙 정보 (예: "사전승낙번호 000000 · 다쏜다 전주장동점"). 넣으면 맨 아래에 표시
+  hoursText : "매일 10:00 ~ 20:00",
+  open      : "10:00",            // 여는 시간 (지금 상담 가능 표시에 사용)
+  close     : "20:00",            // 닫는 시간
+  closedDays: [],                 // 쉬는 요일 번호 (일=0, 월=1 … 토=6) 예: [0] = 일요일 휴무
+  bonus     : "사은품 추가 증정",   // ★ 쿠폰 혜택 — 구체적일수록 좋아요 (예: "고속 충전기 증정")
+  couponUntil: "",                 // 쿠폰 기한 (예: "2026.12.31까지") — 비우면 안 보임
+  bizInfo   : "상호 다쏜다 전주장동점 · 대표 OOO · 사업자등록번호 000-00-00000",
+  keepMonths: "3"                 // 상담 정보 보관 기간(개월)
+};
+
+/* 사진 파일 이름표 — index.html 과 같은 곳에 이 이름으로 사진을 올리면 자동으로 바뀝니다.
+   사진이 없으면 그림 대신 예쁜 기본 이미지가 나와요.
+   사진 자리 확인: 주소 끝에 ?edit=1 을 붙여서 열어 보세요. */
+const IMAGES = {
+  hero    : "hero.jpg",      // 맨 위 큰 사진 (세로 사진, 점장 사진 또는 상담 모습)
+  gift    : "gift.jpg",      // 쿠폰 옆 사은품 사진
+  phone   : "phone.jpg",     // 휴대폰 상품
+  internet: "internet.jpg",  // 인터넷+TV
+  mvno    : "mvno.jpg",      // 알뜰폰
+  rental  : "rental.jpg",    // 가전 렌탈
+  store1  : "store1.jpg",    // 점장 얼굴 사진 (채널 소식에 올린 그 사진처럼)
+  store2  : "store2.jpg"     // 상담하는 모습 또는 사무실 사진
+};
+
+/* 우리 약속 — ★ 실제로 지키는 것만 남기세요. 다른 매장 예시: "카드 발급 강요 없음", "기기 반납 조건 없음" */
+const PROMISES = [
+  "견적만 받아도 OK",
+  "최종 부담금까지 계산",
+  "찾아가는 상담",
+  // "카드 발급 강요 없음",
+  // "기기 반납 조건 없음",
+  // "부가서비스 강요 없음",
+];
+
+/* 인기 기종 — 가격은 '별도 문의'로 두고, 누르면 신청서에 기종이 자동으로 들어가요 */
+const MODELS = [
+  { name: "갤럭시 S26 시리즈", note: "최신 모델" },
+  { name: "아이폰 18 시리즈",  note: "최신 모델" },
+  { name: "갤럭시 S25 시리즈", note: "가성비 좋은 직전 모델" },
+  { name: "아이폰 17 시리즈",  note: "가성비 좋은 직전 모델" },
+  { name: "효도폰 · 키즈폰",   note: "부모님·아이 첫 폰" },
+];
+
+/* 손님 후기 — 실제 손님께 허락받은 후기만 넣으세요. 비어 있으면 후기 칸은 숨겨집니다.
+   넣는 법: 아래 예시 줄 앞의 // 를 지우고 내용을 바꾸면 됩니다. */
+const REVIEWS = [
+  // { name: "장동 김OO님", tag: "기기변경", text: "부모님 폰 바꾸러 갔는데 요금제까지 꼼꼼하게 봐 주셨어요.", photo: "review1.jpg" },
+  //   ↑ photo는 손님이 허락한 개통 인증 사진 (없으면 빼도 됨)
+  // { name: "혁신도시 이OO님", tag: "인터넷+TV", text: "약정 끝난 줄도 몰랐는데 정리해 주셔서 요금이 줄었어요." },
+];
+/* ===================== 수정 칸 끝 ===================== */
+</script>
+
+<style>
+:root{
+  --carrot:#FF6F0F; --carrot-d:#E85D00; --carrot-l:#FFF1E6;
+  --ink:#1A1D24; --ink2:#4A505C; --mute:#8A909C;
+  --bg:#FFF9F4; --card:#FFFFFF; --line:#F1E6DC;
+  --green:#14B866; --navy:#20263A;
+  --r:20px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+  background:var(--bg);color:var(--ink);line-height:1.55;word-break:keep-all;
+  padding-bottom:calc(84px + env(safe-area-inset-bottom))}
+a{color:inherit;text-decoration:none}
+button,input,select,textarea{font:inherit;color:inherit}
+.wrap{max-width:480px;margin:0 auto;background:var(--bg)}
+section{padding:28px 18px}
+.eyebrow{display:inline-block;font-size:12px;font-weight:700;color:var(--carrot);letter-spacing:.02em;margin-bottom:6px}
+h2{font-size:22px;line-height:1.35;font-weight:800;letter-spacing:-.02em}
+.lead{color:var(--ink2);font-size:14.5px;margin-top:6px}
+
+/* 상단 띠 */
+.topbar{position:sticky;top:0;z-index:40;background:var(--carrot);color:#fff;text-align:center;
+  font-size:13px;font-weight:700;padding:9px 12px;letter-spacing:-.01em}
+
+/* 사진 자리 (사진 없으면 기본 그림) */
+.ph{position:relative;overflow:hidden;background:var(--carrot-l)}
+.ph img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .4s}
+.ph img.on{opacity:1}
+.ph.fallback{background:var(--fb,linear-gradient(135deg,#FFB27A,#FF6F0F))}
+.ph.fallback::after{content:attr(data-emoji);position:absolute;inset:0;display:grid;place-items:center;
+  font-size:var(--es,56px);filter:drop-shadow(0 6px 14px rgba(0,0,0,.18))}
+.ph.fallback::before{content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at 20% 15%,rgba(255,255,255,.35) 0 18%,transparent 19%),
+             radial-gradient(circle at 85% 90%,rgba(255,255,255,.22) 0 22%,transparent 23%)}
+body.edit .ph .tag{display:block}
+.ph .tag{display:none;position:absolute;left:8px;top:8px;z-index:5;background:rgba(0,0,0,.75);color:#fff;
+  font-size:11px;font-weight:700;padding:4px 8px;border-radius:8px}
+
+/* 히어로 */
+.hero{padding:0;position:relative}
+.hero .ph{aspect-ratio:4/5;--es:120px;--fb:linear-gradient(160deg,#FFC59A 0%,#FF8A3D 45%,#E85D00 100%)}
+.hero .shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 30%,rgba(20,12,4,.78) 100%);pointer-events:none}
+.hero .copy{position:absolute;left:0;right:0;bottom:0;padding:22px 20px 24px;color:#fff}
+.status{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.95);color:var(--ink);
+  font-size:12.5px;font-weight:700;padding:6px 11px;border-radius:999px;margin-bottom:12px}
+.status i{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 rgba(20,184,102,.6);animation:ping 1.8s infinite}
+.status.off i{background:#B0B5BF;animation:none}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(20,184,102,.55)}80%,100%{box-shadow:0 0 0 9px rgba(20,184,102,0)}}
+.kicker{font-size:13px;font-weight:800;color:#FFD3B0;margin-bottom:6px;letter-spacing:-.01em}
+.award{margin-top:12px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:11px 14px;font-size:13px;font-weight:700;color:var(--ink2)}
+.hero h1{font-size:29px;line-height:1.28;font-weight:850;letter-spacing:-.03em;text-shadow:0 2px 12px rgba(0,0,0,.25)}
+.hero h1 em{font-style:normal;color:#FFD3B0}
+.hero p{font-size:14.5px;opacity:.92;margin-top:8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.chips span{font-size:12px;font-weight:700;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);
+  padding:5px 10px;border-radius:999px;backdrop-filter:blur(4px)}
+.hero-cta{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px 18px 0}
+.btn{display:flex;align-items:center;justify-content:center;gap:6px;height:52px;border-radius:14px;border:0;
+  font-size:15.5px;font-weight:800;cursor:pointer;transition:transform .1s}
+.btn:active{transform:scale(.97)}
+.btn-o{background:var(--carrot);color:#fff;box-shadow:0 8px 18px -6px rgba(255,111,15,.6)}
+.btn-k{background:#FEE500;color:#191600}
+.btn-d{background:var(--navy);color:#fff}
+.btn-w{background:#fff;color:var(--ink);border:1.5px solid var(--line)}
+
+/* 약속 띠 */
+.promise{display:flex;flex-wrap:wrap;gap:6px;padding:12px 18px 0}
+.promise span{font-size:12.5px;font-weight:700;color:var(--ink);background:#fff;border:1.5px solid #FFD0AE;padding:6px 10px;border-radius:999px}
+.promise span::before{content:"✓ ";color:var(--carrot);font-weight:900}
+/* 계산기 */
+.calc{background:#fff;border:2px solid var(--carrot);border-radius:22px;padding:20px 18px;margin-top:4px}
+.calc .row2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.calc label{font-size:12.5px;font-weight:700;color:var(--ink2);display:block;margin-bottom:5px}
+.calc input{width:100%;padding:13px;border-radius:12px;border:1.5px solid #E8E2DC;background:#FCFAF8;font-size:17px;font-weight:700;outline:none}
+.calc input:focus{border-color:var(--carrot)}
+.calc .res{margin-top:14px;background:var(--carrot-l);border-radius:14px;padding:14px;text-align:center}
+.calc .res small{display:block;font-size:12.5px;color:var(--ink2)}
+.calc .res b{display:block;font-size:28px;font-weight:900;color:var(--carrot-d);letter-spacing:-.02em;margin:2px 0}
+.calc .res span{font-size:13px;color:var(--ink2)}
+.calc .btn{width:100%;margin-top:12px}
+.formula{margin-top:12px;font-size:13px;color:var(--ink2);background:#FAF7F4;border-radius:12px;padding:11px 13px}
+.formula b{color:var(--ink)}
+/* 인기 기종 */
+.models{margin-top:14px;background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.models button{display:flex;width:100%;align-items:center;justify-content:space-between;gap:10px;padding:15px 16px;border:0;background:none;
+  border-bottom:1px solid var(--line);text-align:left;cursor:pointer}
+.models button:last-child{border-bottom:0}
+.models strong{display:block;font-size:15.5px;font-weight:800}
+.models small{display:block;font-size:12.5px;color:var(--mute)}
+.models em{flex:none;font-style:normal;font-size:13px;font-weight:800;color:var(--carrot);background:var(--carrot-l);padding:6px 10px;border-radius:999px}
+.rv img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:12px;margin-top:10px;display:block}
+.until{display:inline-block;margin-top:6px;font-size:11.5px;font-weight:700;color:var(--mute);background:#F4F1EE;padding:3px 8px;border-radius:6px}
+
+/* 쿠폰 */
+.coupon{display:flex;background:#fff;border-radius:var(--r);overflow:hidden;
+  box-shadow:0 10px 30px -14px rgba(232,93,0,.45);border:2px solid var(--carrot)}
+.coupon .left{flex:1;padding:18px 16px 18px 18px;border-right:2px dashed #FFD0AE;position:relative}
+.coupon .left::before,.coupon .left::after{content:"";position:absolute;right:-11px;width:20px;height:20px;border-radius:50%;background:var(--bg)}
+.coupon .left::before{top:-11px}.coupon .left::after{bottom:-11px}
+.coupon .ph{width:112px;flex:none;--es:46px;--fb:linear-gradient(160deg,#FFE3CC,#FFB27A)}
+.coupon b{display:block;font-size:12px;color:var(--carrot);font-weight:800}
+.coupon strong{display:block;font-size:20px;font-weight:850;line-height:1.3;margin:4px 0 6px;letter-spacing:-.02em}
+.coupon small{font-size:12.5px;color:var(--ink2)}
+.coupon q{quotes:none;font-weight:800;color:var(--ink)}
+
+/* 체크리스트 */
+.checks{margin-top:16px;display:grid;gap:8px}
+.checks li{list-style:none;display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid var(--line);
+  padding:13px 14px;border-radius:14px;font-size:15px;font-weight:600}
+.checks li::before{content:"✓";flex:none;width:22px;height:22px;border-radius:50%;background:var(--carrot);color:#fff;
+  font-size:13px;font-weight:900;display:grid;place-items:center;margin-top:1px}
+
+/* 상품 */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.prod{background:#fff;border-radius:18px;overflow:hidden;border:1px solid var(--line);text-align:left;cursor:pointer;padding:0}
+.prod .ph{aspect-ratio:1/1;--es:52px}
+.prod .t{padding:11px 12px 13px}
+.prod strong{display:block;font-size:15px;font-weight:800;letter-spacing:-.02em}
+.prod span{display:block;font-size:12.5px;color:var(--mute);margin-top:2px}
+.prod em{display:inline-block;font-style:normal;font-size:12px;font-weight:800;color:var(--carrot);margin-top:6px}
+.p1 .ph{--fb:linear-gradient(150deg,#FFC08F,#FF6F0F)}
+.p2 .ph{--fb:linear-gradient(150deg,#9FD4FF,#3D8BFF)}
+.p3 .ph{--fb:linear-gradient(150deg,#A8EBC6,#14B866)}
+.p4 .ph{--fb:linear-gradient(150deg,#D9C6FF,#8A5CF6)}
+
+/* 단계 */
+.steps{margin-top:18px;display:grid;gap:0;position:relative}
+.step{display:flex;gap:14px;padding-bottom:18px;position:relative}
+.step:not(:last-child)::after{content:"";position:absolute;left:19px;top:42px;bottom:4px;width:2px;background:#FFD0AE}
+.step .n{flex:none;width:40px;height:40px;border-radius:50%;background:var(--carrot);color:#fff;font-weight:900;display:grid;place-items:center;font-size:16px}
+.step strong{display:block;font-size:16px;font-weight:800;margin-top:2px}
+.step span{font-size:14px;color:var(--ink2)}
+
+/* 매장 사진 */
+.gallery{display:grid;grid-template-columns:1.25fr 1fr;gap:8px;margin-top:16px}
+.gallery .ph{border-radius:16px;aspect-ratio:3/4;--es:48px}
+.gallery .ph:first-child{--fb:linear-gradient(160deg,#FFE0C7,#FF9A55)}
+.gallery .ph:last-child{--fb:linear-gradient(160deg,#E7E9EF,#A9B0C0)}
+
+/* 후기 */
+.reviews{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;margin:16px -18px 0;padding:0 18px 6px}
+.reviews::-webkit-scrollbar{display:none}
+.rv{flex:0 0 82%;scroll-snap-align:start;background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px}
+.rv .stars{color:#FFB800;font-size:14px;letter-spacing:1px}
+.rv p{font-size:14.5px;margin:8px 0 10px}
+.rv small{font-size:12.5px;color:var(--mute)}
+.rv small b{color:var(--carrot);font-weight:700;margin-left:6px}
+
+/* 신청서 */
+.formcard{background:#fff;border-radius:24px;padding:22px 18px;box-shadow:0 14px 40px -20px rgba(26,29,36,.35);border:1px solid var(--line)}
+.field{margin-top:14px}
+.field label{display:block;font-size:13px;font-weight:700;color:var(--ink2);margin-bottom:6px}
+.field input,.field select,.field textarea{width:100%;padding:14px;border-radius:12px;border:1.5px solid #E8E2DC;background:#FCFAF8;
+  font-size:16px;outline:none;transition:border .15s}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--carrot);background:#fff}
+.agree{display:flex;gap:9px;align-items:flex-start;margin-top:16px;font-size:13.5px;font-weight:600}
+.agree input{width:20px;height:20px;accent-color:var(--carrot);flex:none;margin-top:1px}
+details.policy{margin-top:8px;font-size:12.5px;color:var(--mute);background:#FAF7F4;border-radius:10px;padding:10px 12px}
+details.policy summary{cursor:pointer;font-weight:700;color:var(--ink2)}
+details.policy p{margin-top:6px}
+.formcard .btn{width:100%;margin-top:16px;height:56px;font-size:16.5px}
+.hint{text-align:center;font-size:12.5px;color:var(--mute);margin-top:10px}
+.alt{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.alt .btn{height:46px;font-size:14px}
+
+/* FAQ */
+.faq{margin-top:14px;display:grid;gap:8px}
+.faq details{background:#fff;border:1px solid var(--line);border-radius:14px;padding:0 14px}
+.faq summary{list-style:none;cursor:pointer;padding:15px 24px 15px 0;font-weight:700;font-size:15px;position:relative}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:0;top:12px;font-size:20px;color:var(--carrot);font-weight:700}
+.faq details[open] summary::after{content:"−"}
+.faq details p{font-size:14px;color:var(--ink2);padding-bottom:15px;margin-top:-4px}
+
+/* 매장 안내 */
+.info{background:var(--navy);color:#fff;border-radius:24px;padding:22px 18px}
+.info h2{color:#fff}
+.info dl{margin-top:14px;display:grid;gap:10px;font-size:14.5px}
+.info dt{font-size:12px;color:#9AA3B8;font-weight:700}
+.info dd{font-weight:600}
+.info .row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
+.info .btn{height:46px;font-size:14px}
+
+footer{padding:22px 18px 30px;font-size:11.5px;color:var(--mute);text-align:center;line-height:1.7}
+
+/* 하단 고정 버튼 */
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:50;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:9px 12px calc(9px + env(safe-area-inset-bottom))}
+.dock .in{max-width:480px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr 1.25fr;gap:7px}
+.dock .btn{height:50px;font-size:14.5px;border-radius:13px}
+
+/* 알림 */
+.toast{position:fixed;left:50%;bottom:96px;transform:translate(-50%,20px);opacity:0;z-index:60;background:var(--ink);color:#fff;
+  font-size:14px;font-weight:600;padding:12px 16px;border-radius:12px;max-width:90%;text-align:center;transition:.3s;pointer-events:none}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* 사진 점검표 (?edit=1) */
+.editpanel{display:none;position:fixed;top:44px;right:10px;z-index:70;background:#fff;border:2px solid var(--carrot);
+  border-radius:14px;padding:12px 14px;font-size:12.5px;box-shadow:0 10px 30px rgba(0,0,0,.2);max-width:230px}
+body.edit .editpanel{display:block}
+.editpanel b{display:block;margin-bottom:6px;color:var(--carrot)}
+.editpanel li{list-style:none;padding:2px 0}
+
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .6s,transform .6s}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none}.status i{animation:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">🥕 당근 이웃 전용 · 전주 <span class="js-area">송천동·장동·혁신도시</span> 찾아가는 상담</div>
+
+  <!-- 1. 첫 화면 -->
+  <header class="hero">
+    <div class="ph" data-img="hero" data-emoji="📱"><img alt="다쏜다 전주장동점 상담"></div>
+    <div class="shade"></div>
+    <div class="copy">
+      <div class="status" id="status"><i></i><span>상담 가능 시간을 확인하는 중…</span></div>
+      <div class="kicker">새는 돈 막아주는 통신비 절감 컨설팅</div>
+      <h1>휴대폰 바꿀 때 됐다면,<br><em>요금부터</em> 같이 봐 드릴게요</h1>
+      <p>기기값 할인 · 요금제 정리 · 사은품까지 한 번에 상담</p>
+      <div class="chips"><span>기기변경·번호이동</span><span>인터넷+TV</span><span>알뜰폰</span><span>가전 렌탈</span><span>🚗 찾아가는 상담</span></div>
+    </div>
+  </header>
+  <div class="hero-cta">
+    <a class="btn btn-o js-tel" href="#">📞 전화 상담</a>
+    <a class="btn btn-k js-kakao" href="#" target="_blank" rel="noopener">💬 카톡 상담</a>
+  </div>
+  <div class="promise" id="promise"></div>
+
+  <!-- 2. 당근 쿠폰 -->
+  <section class="reveal">
+    <div class="coupon">
+      <div class="left">
+        <b>🥕 당근 이웃 전용 쿠폰</b>
+        <strong class="js-bonus">사은품 추가 증정</strong>
+        <small>상담할 때 <q>“당근 보고 왔어요”</q> 한마디면 끝!<br>이 화면을 캡처해서 보여 주셔도 돼요.</small>
+        <span class="until js-until" hidden></span>
+      </div>
+      <div class="ph" data-img="gift" data-emoji="🎁"><img alt="사은품"></div>
+    </div>
+  </section>
+
+  <!-- 3. 이런 분께 -->
+  <section class="reveal" style="padding-top:8px">
+    <span class="eyebrow">CHECK</span>
+    <h2>이런 분이라면<br>상담만 받아 보셔도 좋아요</h2>
+    <ul class="checks">
+      <li>약정이 끝났는데 그냥 쓰고 있다</li>
+      <li>매달 휴대폰 요금이 부담된다</li>
+      <li>부모님·자녀 폰을 바꿔 드리려고 한다</li>
+      <li>인터넷·TV 약정 만료가 다가온다</li>
+    </ul>
+  </section>
+
+  <!-- 3-1. 통신비 계산기 -->
+  <section class="reveal" style="padding-top:8px">
+    <span class="eyebrow">CALCULATOR</span>
+    <h2>우리 집 통신비,<br>2년이면 얼마일까요?</h2>
+    <div class="calc">
+      <p class="lead" style="margin-top:0">지난달 요금 고지서 금액을 넣어 보세요.</p>
+      <div class="row2">
+        <div><label for="cPhone">휴대폰 요금 (월, 가족 합계)</label><input id="cPhone" inputmode="numeric" placeholder="예: 120000"></div>
+        <div><label for="cNet">인터넷·TV (월)</label><input id="cNet" inputmode="numeric" placeholder="예: 45000"></div>
+      </div>
+      <div class="res"><small>2년(24개월) 동안 내는 돈</small><b id="cTotal">0원</b><span>이 돈을 줄일 수 있는지 무료로 따져 봐 드려요</span></div>
+      <button class="btn btn-o" id="cGo" type="button">📝 이 금액으로 절감 상담 받기</button>
+      <div class="formula">💡 휴대폰은 기기값만 보면 안 돼요.<br><b>실제 부담금 = 기기값 − 지원금 + (요금제 × 약정 개월)</b><br>이 숫자로 자급제와 통신사 개통을 비교해 드려요.</div>
+    </div>
+  </section>
+
+  <!-- 4. 상품 -->
+  <section class="reveal" style="padding-top:8px">
+    <span class="eyebrow">SERVICE</span>
+    <h2>무엇을 바꾸고 싶으세요?</h2>
+    <p class="lead">누르면 상담 신청서에 바로 담겨요.</p>
+    <div class="grid">
+      <button class="prod p1" data-pick="휴대폰 기기변경/번호이동">
+        <div class="ph" data-img="phone" data-emoji="📱"><img alt="휴대폰"></div>
+        <div class="t"><strong>휴대폰 변경</strong><span>최신폰부터 효도폰까지</span><em>상담 신청 →</em></div>
+      </button>
+      <button class="prod p2" data-pick="인터넷 + TV 가입">
+        <div class="ph" data-img="internet" data-emoji="🌐"><img alt="인터넷과 TV"></div>
+        <div class="t"><strong>인터넷 + TV</strong><span>약정 끝나기 전 갈아타기</span><em>상담 신청 →</em></div>
+      </button>
+      <button class="prod p3" data-pick="알뜰폰 요금제 개통">
+        <div class="ph" data-img="mvno" data-emoji="🏷️"><img alt="알뜰폰"></div>
+        <div class="t"><strong>알뜰폰</strong><span>통신비 다이어트</span><em>상담 신청 →</em></div>
+      </button>
+      <button class="prod p4" data-pick="가전 렌탈">
+        <div class="ph" data-img="rental" data-emoji="🏠"><img alt="가전 렌탈"></div>
+        <div class="t"><strong>가전 렌탈</strong><span>정수기 등 생활가전</span><em>상담 신청 →</em></div>
+      </button>
+    </div>
+  </section>
+
+  <!-- 4-1. 인기 기종 -->
+  <section class="reveal" style="padding-top:8px">
+    <span class="eyebrow">PRICE</span>
+    <h2>인기 기종 가격은<br>조건 듣고 바로 알려 드려요</h2>
+    <p class="lead">통신사·요금제·지금 쓰는 폰에 따라 달라서, 누르면 맞춤 견적을 받을 수 있어요.</p>
+    <div class="models" id="models"></div>
+  </section>
+
+  <!-- 5. 진행 순서 -->
+  <section class="reveal" style="padding-top:8px">
+    <span class="eyebrow">HOW</span>
+    <h2>딱 3단계면 끝나요</h2>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><div><strong>문의 남기기</strong><span>전화·문자·카톡 중 편한 걸로</span></div></div>
+      <div class="step"><div class="n">2</div><div><strong>맞춤 견적 안내</strong><span>지금 쓰는 요금·약정을 보고 계산해 드려요</span></div></div>
+      <div class="step"><div class="n">3</div><div><strong>만나서 개통</strong><span>사무실로 오셔도, 댁 근처로 찾아가도 돼요. 본인 신분증만 챙겨 주세요</span></div></div>
+    </div>
+  </section>
+
+  <!-- 6. 매장 사진 -->
+  <section class="reveal" style="padding-top:0">
+    <span class="eyebrow">WHO</span>
+    <h2>얼굴 보고 상담하는<br>동네 점장이에요</h2>
+    <p class="lead">점장 <b class="js-manager">방극률</b>이 직접 상담해요. 개통 후에도 궁금한 건 언제든 연락 주세요.</p>
+    <div class="gallery">
+      <div class="ph" data-img="store1" data-emoji="🙋‍♂️"><img alt="점장 사진"></div>
+      <div class="ph" data-img="store2" data-emoji="🤝"><img alt="상담하는 모습"></div>
+    </div>
+    <div class="award js-awardbox" hidden>🏆 <span class="js-awards"></span></div>
+  </section>
+
+  <!-- 7. 후기 (REVIEWS가 비어 있으면 숨김) -->
+  <section class="reveal" id="reviewSec" hidden style="padding-top:8px">
+    <span class="eyebrow">REVIEW</span>
+    <h2>다녀가신 이웃 이야기</h2>
+    <div class="reviews" id="reviews"></div>
+  </section>
+  <section id="daangnSec" hidden style="padding-top:0">
+    <a class="btn btn-w js-daangn" href="#" target="_blank" rel="noopener">🥕 당근 비즈프로필 후기 보러 가기</a>
+  </section>
+
+  <!-- 8. 상담 신청 -->
+  <section id="apply" class="reveal">
+    <div class="formcard">
+      <span class="eyebrow">1분 상담 신청</span>
+      <h2>번호만 남겨 주시면<br>먼저 연락드릴게요</h2>
+      <form id="form" novalidate>
+        <div class="field"><label for="fName">성함</label>
+          <input id="fName" autocomplete="name" placeholder="예: 홍길동" required></div>
+        <div class="field"><label for="fPhone">연락처</label>
+          <input id="fPhone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="010-0000-0000" maxlength="13" required></div>
+        <div class="field"><label for="fType">관심 상품</label>
+          <select id="fType">
+            <option>휴대폰 기기변경/번호이동</option>
+            <option>인터넷 + TV 가입</option>
+            <option>알뜰폰 요금제 개통</option>
+            <option>가전 렌탈</option>
+          </select></div>
+        <div class="field"><label for="fMemo">원하는 기종·문의 (선택)</label>
+          <textarea id="fMemo" rows="2" placeholder="예: 갤럭시 새 모델 색상 있나요?"></textarea></div>
+        <label class="agree"><input type="checkbox" id="fAgree"> 상담을 위한 개인정보 수집·이용에 동의합니다 (필수)</label>
+        <details class="policy"><summary>내용 보기</summary>
+          <p>· 수집 항목: 성함, 연락처, 문의 내용<br>· 목적: 상품 상담 및 연락<br>· 보관 기간: 상담 완료 후 <span class="js-keep">3</span>개월 뒤 파기<br>· 동의하지 않으셔도 전화·카톡으로 상담받으실 수 있어요.</p>
+        </details>
+        <button class="btn btn-o" type="submit">🔥 당근 이웃 혜택으로 상담 신청</button>
+        <p class="hint">누르면 문자 앱이 열려요. <b>보내기</b>만 눌러 주세요.</p>
+      </form>
+      <div class="alt">
+        <a class="btn btn-w js-tel" href="#">📞 바로 전화</a>
+        <a class="btn btn-k js-kakao" href="#" target="_blank" rel="noopener">💬 카톡 문의</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. 자주 묻는 질문 -->
+  <section class="reveal" style="padding-top:8px">
+    <span class="eyebrow">FAQ</span>
+    <h2>자주 물어보세요</h2>
+    <div class="faq">
+      <details><summary>상담만 받아도 되나요?</summary><p>그럼요. 견적만 듣고 가셔도 괜찮아요. 부담 없이 물어보세요.</p></details>
+      <details><summary>할부가 남았는데 바꿀 수 있나요?</summary><p>남은 할부와 약정을 먼저 확인해서, 지금 바꾸는 게 이득인지 계산해 드려요.</p></details>
+      <details><summary>인터넷 위약금이 걱정돼요</summary><p>해지 위약금까지 따져 보고 안내해 드려요. 약정 만료일을 모르셔도 같이 확인해 드려요.</p></details>
+      <details><summary>매장에 꼭 가야 하나요?</summary><p>아니요. 송천동 상담 사무실로 오셔도 되고, 시간 맞춰 댁 근처로 찾아가서 상담해 드려요.</p></details>
+      <details><summary>개통하러 갈 때 뭘 챙겨요?</summary><p>본인 신분증을 챙겨 오세요. 가족 명의로 개통하실 땐 필요한 서류가 다르니 미리 문의 주세요.</p></details>
+    </div>
+  </section>
+
+  <!-- 10. 매장 안내 -->
+  <section class="reveal" style="padding-top:8px">
+    <div class="info">
+      <span class="eyebrow">VISIT</span>
+      <h2 class="js-name">다쏜다 전주장동점</h2>
+      <dl>
+        <div><dt>상담 장소</dt><dd class="js-addr"></dd></div>
+        <div><dt>상담 지역</dt><dd><span class="js-area">송천동·장동·혁신도시</span> (찾아가는 상담 가능)</dd></div>
+        <div><dt>영업시간</dt><dd class="js-hours"></dd></div>
+        <div><dt>전화</dt><dd class="js-phone"></dd></div>
+      </dl>
+      <a class="btn btn-w js-approvalbtn" href="#" target="_blank" rel="noopener" hidden style="margin-top:16px">🔒 판매점 인증 정보 확인</a>
+      <div class="row">
+        <a class="btn btn-o js-map" href="#" target="_blank" rel="noopener">🗺️ 길찾기</a>
+        <a class="btn btn-k js-kakao" href="#" target="_blank" rel="noopener">💬 카톡 상담</a>
+      </div>
+      <a class="btn btn-w js-kakaoadd" href="#" target="_blank" rel="noopener" style="margin-top:8px">➕ 카톡 채널 추가하고 혜택 알림 받기</a>
+    </div>
+  </section>
+
+  <footer><span class="js-biz"></span><br><span class="js-approval"></span>상담 신청 내용은 문자로 매장에 전달되며, 웹사이트에는 저장되지 않습니다.</footer>
+</div>
+
+<!-- 하단 고정 버튼 -->
+<nav class="dock"><div class="in">
+  <a class="btn btn-d js-tel" href="#">📞 전화</a>
+  <a class="btn btn-k js-kakao" href="#" target="_blank" rel="noopener">💬 카톡</a>
+  <a class="btn btn-o" href="#apply">📝 상담 신청</a>
+</div></nav>
+
+<div class="toast" id="toast"></div>
+<div class="editpanel"><b>📷 사진 점검표</b><ul id="editList"></ul></div>
+
+<script>
+(function(){
+  const $ = s => document.querySelector(s), $$ = s => document.querySelectorAll(s);
+  const S = SETTINGS, telNum = S.phone.replace(/\D/g,''), smsNum = S.smsPhone.replace(/\D/g,'');
+  const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+  const esc = t => String(t).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const smsLink = body => `sms:${smsNum}${isIOS ? '&' : '?'}body=${encodeURIComponent(body)}`;
+
+  // 설정값 채우기
+  $$('.js-tel').forEach(a => a.href = 'tel:' + telNum);
+  $$('.js-kakao').forEach(a => a.href = S.kakaoUrl);
+  $$('.js-map').forEach(a => a.href = S.mapUrl);
+  $$('.js-bonus').forEach(e => e.textContent = S.bonus);
+  $$('.js-name').forEach(e => e.textContent = S.storeName);
+  $('.js-addr').textContent = S.address;
+  $('.js-hours').textContent = S.hoursText;
+  $('.js-phone').textContent = S.phone;
+  $('.js-biz').textContent = S.bizInfo;
+  $('.js-keep').textContent = S.keepMonths;
+  $$('.js-area').forEach(e => e.textContent = S.area);
+  $$('.js-manager').forEach(e => e.textContent = S.manager);
+  $$('.js-kakaoadd').forEach(a => a.href = S.kakaoAdd);
+  if (S.awards) { $('.js-awardbox').hidden = false; $('.js-awards').textContent = S.awards; }
+  if (S.approval) $('.js-approval').innerHTML = '🔒 ' + S.approval.replace(/[<>&]/g,'') + '<br>';
+  if (S.daangnUrl) { $('#daangnSec').hidden = false; $('.js-daangn').href = S.daangnUrl; }
+
+  // 사진 넣기 (없으면 기본 그림)
+  const edit = /[?&]edit=1/.test(location.search);
+  if (edit) document.body.classList.add('edit');
+  const status = {};
+  $$('.ph[data-img]').forEach(ph => {
+    const key = ph.dataset.img, file = IMAGES[key], img = ph.querySelector('img');
+    const tag = document.createElement('span'); tag.className = 'tag'; tag.textContent = file || key; ph.appendChild(tag);
+    const fail = () => { ph.classList.add('fallback'); img.remove(); status[key] = false; drawEdit(); };
+    if (!file) return fail();
+    img.decoding = 'async';
+    img.onload = () => { img.classList.add('on'); status[key] = true; drawEdit(); };
+    img.onerror = fail;
+    img.src = file;
+  });
+  function drawEdit(){
+    if (!edit) return;
+    $('#editList').innerHTML = Object.keys(IMAGES).map(k =>
+      `<li>${status[k] === true ? '✅' : status[k] === false ? '⬜' : '⏳'} ${IMAGES[k]}</li>`).join('');
+  }
+  drawEdit();
+
+  // 지금 상담 가능?
+  (function(){
+    const now = new Date(), m = now.getHours()*60 + now.getMinutes();
+    const toM = t => { const [h,mm] = t.split(':').map(Number); return h*60+mm; };
+    const open = !S.closedDays.includes(now.getDay()) && m >= toM(S.open) && m < toM(S.close);
+    const el = $('#status');
+    if (open) el.querySelector('span').textContent = `지금 상담 가능 · ${S.close}까지`;
+    else { el.classList.add('off'); el.querySelector('span').textContent = '영업 종료 · 문자 남기시면 내일 먼저 연락드려요'; }
+  })();
+
+  // 약속 띠
+  $('#promise').innerHTML = PROMISES.map(t => `<span>${esc(t)}</span>`).join('');
+  if (!PROMISES.length) $('#promise').remove();
+  if (S.couponUntil) { const u = $('.js-until'); u.hidden = false; u.textContent = S.couponUntil; }
+  if (S.approvalUrl) { const a = $('.js-approvalbtn'); a.hidden = false; a.href = S.approvalUrl; }
+
+  // 신청서로 보내기 (상품·기종·메모 미리 채움)
+  function toForm(type, memo){
+    if (type) $('#fType').value = type;
+    if (memo) $('#fMemo').value = memo;
+    $('#apply').scrollIntoView({behavior:'smooth'});
+    setTimeout(() => $('#fName').focus({preventScroll:true}), 600);
+  }
+
+  // 인기 기종
+  $('#models').innerHTML = MODELS.map((m,i) =>
+    `<button type="button" data-i="${i}"><span><strong>${esc(m.name)}</strong><small>${esc(m.note||'')}</small></span><em>별도 문의 →</em></button>`).join('');
+  $$('#models button').forEach(b => b.addEventListener('click', () =>
+    toForm('휴대폰 기기변경/번호이동', `${MODELS[b.dataset.i].name} 견적 궁금해요`)));
+  if (!MODELS.length) $('#models').closest('section').remove();
+
+  // 통신비 계산기
+  const num = v => Number(String(v).replace(/\D/g,'')) || 0;
+  const won = n => n.toLocaleString('ko-KR') + '원';
+  function calc(){
+    ['#cPhone','#cNet'].forEach(id => { const e = $(id), n = num(e.value); e.value = n ? n.toLocaleString('ko-KR') : ''; });
+    $('#cTotal').textContent = won((num($('#cPhone').value) + num($('#cNet').value)) * 24);
+  }
+  $('#cPhone').addEventListener('input', calc); $('#cNet').addEventListener('input', calc);
+  $('#cGo').addEventListener('click', () => {
+    const p = num($('#cPhone').value), n = num($('#cNet').value);
+    const memo = (p || n) ? `지금 통신비: 휴대폰 월 ${won(p)} · 인터넷/TV 월 ${won(n)} (2년 ${won((p+n)*24)}) — 줄일 수 있는지 상담 원해요` : '통신비 절감 상담 원해요';
+    toForm(n && !p ? '인터넷 + TV 가입' : null, memo);
+  });
+
+  // 후기
+  if (REVIEWS.length) {
+    $('#reviewSec').hidden = false;
+    $('#reviews').innerHTML = REVIEWS.map(r => {
+      const d = document.createElement('div'); d.textContent = r.text; const t = d.innerHTML;
+      d.textContent = r.name; const n = d.innerHTML; d.textContent = r.tag || ''; const g = d.innerHTML;
+      const ph = r.photo ? `<img src="${esc(r.photo)}" alt="개통 인증 사진" loading="lazy" onerror="this.remove()">` : '';
+      return `<div class="rv"><div class="stars">★★★★★</div>${ph}<p>${t}</p><small>${n}<b>${g}</b></small></div>`;
+    }).join('');
+  }
+
+  // 상품 누르면 신청서로
+  $$('.prod').forEach(b => b.addEventListener('click', () => toForm(b.dataset.pick)));
+
+  // 전화번호 자동 하이픈
+  $('#fPhone').addEventListener('input', e => {
+    const v = e.target.value.replace(/\D/g,'').slice(0,11);
+    e.target.value = v.length < 4 ? v : v.length < 8 ? `${v.slice(0,3)}-${v.slice(3)}` : `${v.slice(0,3)}-${v.slice(3,7)}-${v.slice(7)}`;
+  });
+
+  // 신청 → 문자 앱 열기
+  const toast = msg => { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2600); };
+  $('#form').addEventListener('submit', e => {
+    e.preventDefault();
+    const name = $('#fName').value.trim(), phone = $('#fPhone').value.trim();
+    if (!name) { toast('성함을 입력해 주세요'); return $('#fName').focus(); }
+    if (!/^01\d-?\d{3,4}-?\d{4}$/.test(phone)) { toast('연락처를 다시 확인해 주세요'); return $('#fPhone').focus(); }
+    if (!$('#fAgree').checked) { toast('개인정보 동의에 체크해 주세요'); return; }
+    const memo = $('#fMemo').value.trim();
+    const body = `[당근 보고 상담 신청]\n성함: ${name}\n연락처: ${phone}\n관심: ${$('#fType').value}` + (memo ? `\n문의: ${memo}` : '');
+    location.href = smsLink(body);
+    toast('문자 앱이 열리면 [보내기]만 눌러 주세요!');
+  });
+
+  // 스크롤 등장 효과
+  const io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(x => {
+    if (x.isIntersecting) { x.target.classList.add('in'); io.unobserve(x.target); }
+  }), {threshold:.12}) : null;
+  $$('.reveal').forEach(el => io ? io.observe(el) : el.classList.add('in'));
+})();
+</script>
+</body>
+</html>
