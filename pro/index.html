@@ -90,6 +90,8 @@ label.f{display:block;font-size:12.5px;font-weight:700;color:var(--ink2);margin:
 .pt td.rl{font-size:13.5px;color:var(--ink2);white-space:nowrap}
 .pt td.v{font-size:19px;font-weight:900;letter-spacing:-.02em}
 .pt td.v.best{background:var(--best)}
+.pt td.v .cd{display:block;font-size:11px;font-weight:800;color:#5B4BD6;letter-spacing:0}
+.ph .no{position:absolute;right:22px;bottom:12px;font-size:12px;font-weight:700;opacity:.8}
 .pt td.v.na{font-size:12.5px;color:#B0B5BF;font-weight:700}
 .pt td.v.neg{color:#E5484D}
 .pt tr.sp td{height:8px;border:0;padding:0;background:#fff}
@@ -159,7 +161,9 @@ label.f{display:block;font-size:12.5px;font-weight:700;color:var(--ink2);margin:
       <div id="pvWrap"><div id="poster"></div></div>
       <div style="display:grid;gap:8px;margin-top:12px">
         <button class="btn btn-o" id="save">🖼️ 이미지로 저장 · 보내기</button>
+        <button class="btn btn-n" id="saveCode">🔑 코드표 저장 (나만 보기)</button>
         <button class="btn btn-k" id="copy">📋 카톡용 글로 복사</button>
+        <p class="hint">손님용 이미지 오른쪽 아래 <b>No.번호</b>가 코드표와 같아요. 손님이 이미지를 보내오면 그 번호의 코드표를 찾아보세요.</p>
       </div>
     </section>
 
@@ -347,6 +351,8 @@ function renderRaw(){
 }
 
 /* ---------- 포스터 ---------- */
+let CODEVIEW=false;
+function posterNo(){ const d=new Date(); return `${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}-${D.received.slice(5).replace('-','')}`; }
 function posterTitle(){ const d=new Date(); return S.title||`${d.getMonth()+1}월 ${d.getDate()}일 가격표`; }
 function renderPoster(){
   $('#pTitleIn').value=posterTitle();
@@ -357,15 +363,16 @@ function renderPoster(){
     if(gi) rows+=`<tr class="sp"><td colspan="8"></td></tr>`;
     rows+=`<tr class="gh"><th>${esc(gname==='갤럭시'?'휴대폰 모델':gname)}</th><th>출고가</th>${CARR.map(()=>'<th>번호이동</th><th>기기변경</th>').join('')}</tr>`;
     sel.filter(m=>m.group===gname).forEach(m=>{
-      const vals=CARR.flatMap(c=>['MNP','기변'].map(t=>{const q=quote(c,m.id,t);return q?showPrice(q.price):null}));
+      const qs=CARR.flatMap(c=>['MNP','기변'].map(t=>quote(c,m.id,t)));
+      const vals=qs.map(q=>q?showPrice(q.price):null), codes=qs.map(q=>q?q.o.code:'');
       const min=Math.min(...vals.filter(v=>v!=null));
       rows+=`<tr><td class="nm">${esc(m.name)}</td><td class="rl">${Math.round(release(m)*10000).toLocaleString('ko-KR')}</td>`+
-        vals.map(v=>v==null?`<td class="v na">문의</td>`:`<td class="v ${v===min?'best':''} ${v<0?'neg':''}">${f1(v)}</td>`).join('')+'</tr>';
+        vals.map((v,i)=>v==null?`<td class="v na">문의</td>`:`<td class="v ${v===min?'best':''} ${v<0?'neg':''}">${f1(v)}${CODEVIEW?`<span class="cd">${esc(codes[i])}</span>`:''}</td>`).join('')+'</tr>';
     });
   });
   const condTxt = S.ct==='공시' ? '공통지원금 기준<br>요금제 유지 조건<br>부가서비스 하단 기재' : '선택약정 25% 할인 기준<br>요금제 유지 조건<br>부가서비스 하단 기재';
   $('#poster').innerHTML=`
-    <div class="ph"><div class="shop">다쏜다 전주장동점 · 전화·카톡 상담 / 온라인 가입</div><h2>${esc(posterTitle())}</h2><div class="tag">없는 기종<br>별도 문의</div></div>
+    <div class="ph"><div class="shop">다쏜다 전주장동점 · 전화·카톡 상담 / 온라인 가입</div><h2>${esc(posterTitle())}${CODEVIEW?' <span style="font-size:18px;background:#20263A;padding:3px 8px;border-radius:8px;vertical-align:6px">🔑 코드표 · 나만 보기</span>':''}</h2><div class="tag">없는 기종<br>별도 문의</div><div class="no">No.${posterNo()}</div></div>
     <table class="pt">
       <tr><th class="cond" colspan="2" rowspan="2">${condTxt}</th>${CARR.map(c=>`<th class="cH ${c}" colspan="2">${c==='LG'?'LG':c}</th>`).join('')}</tr>
       <tr>${CARR.map(()=>`<th class="sub" colspan="2">할부원금 (만원)</th>`).join('')}</tr>
@@ -388,7 +395,13 @@ function fitPoster(){
 }
 window.addEventListener('resize',()=>{ if(!$('[data-p=poster]').hidden) fitPoster(); });
 $('#pTitleIn').addEventListener('input',e=>{S.title=e.target.value; save(); $('#poster .ph h2').textContent=posterTitle();});
-$('#save').addEventListener('click',async()=>{
+async function savePoster(code){
+  CODEVIEW=!!code; renderPoster();
+  try{ await doSave(code); } finally { CODEVIEW=false; renderPoster(); }
+}
+$('#save').addEventListener('click',()=>savePoster(false));
+$('#saveCode').addEventListener('click',()=>savePoster(true));
+async function doSave(code){
   if(typeof html2canvas==='undefined'){toast('이미지 도구를 못 불러왔어요. 화면을 캡처해 주세요');return}
   const p=$('#poster'), t=p.style.transform;
   try{
@@ -396,11 +409,11 @@ $('#save').addEventListener('click',async()=>{
     const cv=await html2canvas(p,{scale:2,backgroundColor:'#ffffff',width:720,windowWidth:760});
     p.style.transform=t;
     const blob=await new Promise(r=>cv.toBlob(r,'image/png'));
-    const d=new Date(), name=`다쏜다_가격표_${d.getMonth()+1}월${d.getDate()}일.png`, file=new File([blob],name,{type:'image/png'});
+    const d=new Date(), name=`다쏜다_${code?'코드표':'가격표'}_No${posterNo()}.png`, file=new File([blob],name,{type:'image/png'});
     if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:'다쏜다 가격표'});return}
     const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();toast('이미지를 저장했어요');
   }catch(e){p.style.transform=t; if(e.name!=='AbortError'){console.error(e);toast('저장이 안 되면 화면을 캡처해 주세요')}}
-});
+}
 $('#copy').addEventListener('click',async()=>{
   const L=[`📢 다쏜다 전주장동점 ${posterTitle()}`,`(${S.ct==='공시'?'공통지원금':'선택약정'} 기준 · 이동/기변 · 할부원금 만원)`,''];
   D.models.filter(m=>S.sel.includes(m.id)).forEach(m=>{
@@ -464,6 +477,7 @@ $$('.tabs button').forEach(b=>b.onclick=()=>{
 function renderAll(keepSettings){ renderPick(); renderRecs(); renderPoster(); renderRaw(); if(!keepSettings) renderSettings(); }
 
 /* 테스트용 */
+window.__dsdCode=v=>{CODEVIEW=!!v;renderPoster();};
 window.__dsdDev=data=>{D=data;$('#lock').hidden=true;$('#app').hidden=false;init();};
 })();
 </script>
