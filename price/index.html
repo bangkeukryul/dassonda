@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>다쏜다 혜택표 만들기</title>
+<meta name="theme-color" content="#FF6F0F">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+:root{--o:#FF6F0F;--od:#E85D00;--ol:#FFF1E6;--ink:#1A1D24;--ink2:#4A505C;--mute:#8A909C;--bg:#F6F4F1;--line:#ECE6E0;--navy:#20263A;--green:#14A660;--red:#E5484D}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;background:var(--bg);color:var(--ink);
+  line-height:1.5;word-break:keep-all;-webkit-text-size-adjust:100%}
+button,input,select{font:inherit;color:inherit}
+.wrap{max-width:560px;margin:0 auto;padding:16px 16px 60px}
+header.top{background:var(--navy);color:#fff;padding:18px 16px 16px}
+header.top .in{max-width:560px;margin:0 auto}
+header.top h1{font-size:20px;font-weight:850;letter-spacing:-.02em}
+header.top p{font-size:13px;opacity:.75;margin-top:2px}
+.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;margin-top:12px}
+.step{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:800;margin-bottom:10px}
+.step b{width:24px;height:24px;border-radius:50%;background:var(--o);color:#fff;font-size:13px;display:grid;place-items:center;flex:none}
+.hint{font-size:13px;color:var(--mute);margin-top:6px}
+.file{display:flex;align-items:center;justify-content:center;gap:8px;height:56px;border:2px dashed #FFC9A3;border-radius:14px;background:var(--ol);
+  font-weight:800;color:var(--od);cursor:pointer}
+.file input{display:none}
+.status{margin-top:10px;font-size:13.5px;font-weight:600}
+.status.ok{color:var(--green)} .status.err{color:var(--red)}
+label.f{display:block;font-size:12.5px;font-weight:700;color:var(--ink2);margin:10px 0 5px}
+select,input[type=number]{width:100%;height:48px;padding:0 12px;border:1.5px solid #E3DDD7;border-radius:12px;background:#FCFAF8;font-size:16px;outline:none}
+select:focus,input:focus{border-color:var(--o);background:#fff}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#F1EDE9;padding:4px;border-radius:12px}
+.seg button{height:42px;border:0;border-radius:9px;background:none;font-weight:700;font-size:14px;color:var(--ink2);cursor:pointer}
+.seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+/* 관리표 */
+.tbl{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:6px}
+.tbl th{font-size:11.5px;color:var(--mute);font-weight:700;text-align:center;padding:6px 2px;border-bottom:1px solid var(--line)}
+.tbl th:first-child,.tbl td:first-child{text-align:left}
+.tbl td{padding:8px 2px;border-bottom:1px solid #F3EFEB;text-align:center;vertical-align:middle}
+.tbl td.nm{font-weight:700;font-size:13.5px}
+.tbl td.nm small{display:block;font-weight:500;color:var(--mute);font-size:11px}
+.tbl input[type=checkbox]{width:20px;height:20px;accent-color:var(--o);vertical-align:middle}
+.tbl input.mini{width:58px;height:34px;padding:0 6px;border:1.5px solid #E3DDD7;border-radius:8px;text-align:right;font-size:14px;background:#FCFAF8}
+.hq{color:var(--mute);font-size:12px}
+.cu{font-weight:800;color:var(--od)}
+.cu.zero{color:var(--mute);font-weight:600}
+.quick{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.quick button{height:34px;padding:0 12px;border-radius:999px;border:1.5px solid var(--line);background:#fff;font-size:13px;font-weight:700;cursor:pointer}
+.btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;height:52px;border:0;border-radius:14px;font-size:16px;font-weight:800;cursor:pointer}
+.btn-o{background:var(--o);color:#fff}
+.btn-k{background:#FEE500;color:#191600}
+.btn-w{background:#fff;border:1.5px solid var(--line)}
+.btns{display:grid;gap:8px;margin-top:12px}
+.warn{background:#FFF8E6;border:1px solid #FFE3A3;border-radius:12px;padding:10px 12px;font-size:12.5px;color:#7A5A00;margin-top:10px}
+.empty{color:var(--mute);font-size:14px;text-align:center;padding:18px 0}
+/* ===== 소비자용 혜택표 ===== */
+#poster{width:100%;max-width:540px;margin:0 auto;background:#fff;border-radius:22px;overflow:hidden;border:1px solid var(--line)}
+.p-head{background:linear-gradient(135deg,#FF8A3D,#FF6F0F 55%,#E85D00);color:#fff;padding:20px 20px 18px;position:relative}
+.p-head .shop{font-size:13px;font-weight:700;opacity:.92}
+.p-head h2{font-size:26px;font-weight:900;letter-spacing:-.03em;line-height:1.2;margin-top:4px}
+.p-head .date{position:absolute;right:16px;top:18px;background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.4);
+  font-size:12px;font-weight:800;padding:4px 10px;border-radius:999px}
+.p-cond{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.p-cond span{background:#fff;color:var(--od);font-size:12.5px;font-weight:800;padding:5px 10px;border-radius:999px}
+.p-tbl{width:100%;border-collapse:collapse}
+.p-tbl th{background:#FFF4EC;color:var(--ink2);font-size:13px;font-weight:800;padding:10px 8px;text-align:center}
+.p-tbl th:first-child{text-align:left;padding-left:18px}
+.p-tbl td{padding:13px 8px;border-bottom:1px solid #F4EEE9;text-align:center}
+.p-tbl td:first-child{text-align:left;padding-left:18px;font-weight:800;font-size:15.5px;letter-spacing:-.02em}
+.p-tbl tr:nth-child(even) td{background:#FFFCFA}
+.p-val{display:block;font-size:20px;font-weight:900;color:var(--od);letter-spacing:-.02em;line-height:1.15}
+.p-val.ask{font-size:14px;color:var(--mute);font-weight:700}
+.p-lbl{display:block;font-size:11px;color:var(--mute);font-weight:600;margin-top:2px}
+.p-hot{display:inline-block;background:var(--red);color:#fff;font-size:10.5px;font-weight:800;padding:2px 6px;border-radius:6px;margin-left:5px;vertical-align:2px}
+.p-foot{padding:14px 18px 18px;background:#FAFAF9}
+.p-note{font-size:11.5px;color:var(--ink2);line-height:1.6}
+.p-contact{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:12px;background:var(--navy);color:#fff;border-radius:14px;padding:12px 14px}
+.p-contact b{font-size:17px;font-weight:900;letter-spacing:-.01em;white-space:nowrap}
+.p-contact small{display:block;font-size:11.5px;opacity:.75}
+.p-contact .kk{background:#FEE500;color:#191600;font-size:12px;font-weight:800;padding:7px 10px;border-radius:10px;white-space:nowrap}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;background:var(--ink);color:#fff;font-size:14px;font-weight:600;
+  padding:12px 16px;border-radius:12px;max-width:90%;text-align:center;transition:.3s;pointer-events:none;z-index:9}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header class="top"><div class="in">
+  <h1>📋 다쏜다 혜택표 만들기</h1>
+  <p>본사 엑셀 → 시트 고르기 → 손님용 표 완성. 엑셀은 이 폰 안에서만 읽고 어디에도 올라가지 않아요.</p>
+</div></header>
+
+<div class="wrap">
+
+  <!-- 1. 엑셀 -->
+  <div class="card">
+    <div class="step"><b>1</b>본사 엑셀 올리기</div>
+    <label class="file">📂 엑셀 파일 고르기<input type="file" id="xl" accept=".xlsx,.xls"></label>
+    <div class="status" id="st">아직 파일을 고르지 않았어요.</div>
+  </div>
+
+  <!-- 2. 시트 -->
+  <div class="card" id="c2" hidden>
+    <div class="step"><b>2</b>시트 고르기</div>
+    <select id="sheet"></select>
+    <p class="hint" id="sheetHint"></p>
+  </div>
+
+  <!-- 3. 조건 -->
+  <div class="card" id="c3" hidden>
+    <div class="step"><b>3</b>조건 정하기</div>
+    <label class="f" for="tier">요금제 구간</label>
+    <select id="tier"></select>
+    <label class="f" for="tierName">손님에게 보일 요금제 이름</label>
+    <input type="text" id="tierName" placeholder="예: 월 10만원대 요금제" style="width:100%;height:48px;padding:0 12px;border:1.5px solid #E3DDD7;border-radius:12px;background:#FCFAF8;font-size:16px">
+    <div id="ctWrap">
+      <label class="f">약정 방식</label>
+      <div class="seg" id="ct"><button data-v="공시" class="on">공시지원금</button><button data-v="선택">선택약정 25%</button></div>
+    </div>
+    <div class="row2">
+      <div><label class="f" for="margin">내 몫 (만원, 기본)</label><input type="number" id="margin" inputmode="numeric" value="20" min="0"></div>
+      <div><label class="f" for="carrier">통신사 표시</label>
+        <select id="carrier"><option>LG U+</option><option>SK텔레콤</option><option>KT</option></select></div>
+    </div>
+    <label class="f">손님에게 보여 줄 방식</label>
+    <div class="seg" id="mode"><button data-v="disc" class="on">할인 금액</button><button data-v="price">실구매가</button></div>
+    <p class="hint" id="modeHint">손님에게 "추가 할인 ○○만원"으로 보여 줘요.</p>
+  </div>
+
+  <!-- 4. 기종 -->
+  <div class="card" id="c4" hidden>
+    <div class="step"><b>4</b>기종 고르기 (나만 보는 표)</div>
+    <div class="quick">
+      <button data-q="hot">⭐ 인기 기종만</button><button data-q="all">전체 선택</button><button data-q="none">전체 해제</button>
+    </div>
+    <table class="tbl" id="admin"></table>
+    <div class="warn">⚠️ 시트에 따로 적힌 <b>추가·차감 정책</b>(부가서비스, 안정화 -3만 등)은 자동으로 빠지지 않아요. 기종별 <b>내 몫</b> 칸을 고쳐서 맞춰 주세요.</div>
+  </div>
+
+  <!-- 5. 결과 -->
+  <div class="card" id="c5" hidden>
+    <div class="step"><b>5</b>손님용 혜택표</div>
+    <div id="poster">
+      <div class="p-head">
+        <div class="shop">다쏜다 전주장동점</div>
+        <h2 id="pTitle">오늘의 휴대폰 혜택</h2>
+        <div class="date" id="pDate"></div>
+        <div class="p-cond" id="pCond"></div>
+      </div>
+      <table class="p-tbl" id="pTbl"></table>
+      <div class="p-foot">
+        <p class="p-note" id="pNote"></p>
+        <div class="p-contact">
+          <div><small>전화·문자 상담</small><b id="pTel">010-2069-5220</b></div>
+          <div class="kk">💬 카톡 상담 OK</div>
+        </div>
+      </div>
+    </div>
+    <div class="btns">
+      <button class="btn btn-o" id="save">🖼️ 이미지로 저장</button>
+      <button class="btn btn-k" id="copy">📋 카톡용 글로 복사</button>
+    </div>
+    <p class="hint">저장한 이미지는 카톡 채널 소식·당근 소식에 올리면 돼요.</p>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+const $ = s => document.querySelector(s), $$ = s => document.querySelectorAll(s);
+const esc = t => String(t ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const toast = m => { const t=$('#toast'); t.textContent=m; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),2400); };
+const num = v => { if (v===null||v===undefined||v==='') return null; const n=parseFloat(String(v).replace(/,/g,'')); return isFinite(n)?n:null; };
+const store = { get(k,d){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):d; }catch(e){ return d; } },
+                set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} } };
+
+/* ---------- 기종 이름 ---------- */
+const NAMES = [
+  [/^SM-S942N/,'갤럭시 S26'],[/^SM-S947N/,'갤럭시 S26+'],[/^SM-S948N/,'갤럭시 S26 울트라'],[/^SM-S741N/,'갤럭시 S26 FE'],
+  [/^SM-S931N/,'갤럭시 S25'],[/^SM-S936N/,'갤럭시 S25+'],[/^SM-S938N/,'갤럭시 S25 울트라'],[/^SM-S937N/,'갤럭시 S25 엣지'],[/^SM-S731N/,'갤럭시 S25 FE'],
+  [/^SM-F776N/,'갤럭시 Z 플립8'],[/^SM-F971N/,'갤럭시 Z 폴드8'],[/^SM-F976N/,'갤럭시 Z 폴드8 울트라'],[/^SM-F766N/,'갤럭시 Z 플립7'],
+  [/^SM-F966N/,'갤럭시 Z 폴드7'],[/^SM-F946N/,'갤럭시 Z 폴드5'],[/^SM-A366N/,'갤럭시 A36'],[/^SM-A175N-M2/,'키즈폰 무너에디션2'],
+  [/^SM-A165N-UM/,'키즈폰 무너에디션1'],[/^SM-A175N/,'갤럭시 A17'],[/^SM-A165N/,'갤럭시 A16'],[/^SM-A176L/,'갤럭시 버디4·5'],
+  [/^(IP18PM|UIP18PM)/,'아이폰18 프로맥스'],[/^(IP18P_|UIP18PR)/,'아이폰18 프로'],[/^(IP_DUO|UIPD)/,'아이폰 듀오'],
+  [/^IP17PM_/,'아이폰17 프로맥스'],[/^IP17P_/,'아이폰17 프로'],[/^UIP17-/,'아이폰17 (일반·프로·맥스)'],[/^IP17_/,'아이폰17'],
+  [/^UIP17E/,'아이폰17e'],[/^(IPA_|UIPA)/,'아이폰 에어'],[/^UIP16E/,'아이폰16e'],[/^IP16P_/,'아이폰16 프로'],
+  [/^UIP16-256/,'아이폰16 256GB'],[/^UIP16-128/,'아이폰16'],[/^IP16_/,'아이폰16'],[/^IP15PL/,'아이폰15 플러스'],[/^IP15P_/,'아이폰15 프로']
+];
+const HOT = /^(갤럭시 S26( 울트라)?|갤럭시 Z (플립|폴드)8|아이폰17( \(일반·프로·맥스\))?|아이폰18 프로|아이폰 에어|갤럭시 A17|갤럭시 버디4·5)$/;
+// 시트에 글로 적힌 이름을 손님용으로 다듬기 (LGA2 등)
+function cleanName(t){
+  let n=String(t||'').replace(/\s+/g,' ').trim();
+  n=n.replace(/^S(\d\d)/,'갤럭시 S$1').replace(/ Ultra$/i,' 울트라').replace(/^(폴드|플립)(\d)/,'갤럭시 Z $1$2')
+     .replace(/ Pro Max$/i,' 프로맥스').replace(/ Pro$/i,' 프로').replace(/ or .*$/,'').replace(/^아(\d)/,'아이폰$1');
+  return n;
+}
+function niceName(code, label){
+  const c = String(code||'').trim();
+  for (const [re,n] of NAMES) if (re.test(c)) return n;
+  const l = String(label||'').split('\n')[0].trim();
+  return l || c;
+}
+
+/* ---------- 시트 읽기 (시트마다 모양이 달라서 따로 읽어요) ---------- */
+const T = v => (v===null||v===undefined) ? '' : String(v).trim();
+const PARSERS = [
+  { test: n => /^LGA\(3\)/.test(n), carrier:'LG U+', unit:1, run: parseLGA3 },
+  { test: n => /^LGA\(2\)/.test(n), carrier:'LG U+', unit:1, run: parseLGA2 },
+  { test: n => /^SKA\(/.test(n),    carrier:'SK텔레콤', unit:0.1, run: parseSK },
+];
+function parseLGA3(g){
+  // 4행: 요금제 구간(D,F,H,J,L,N) / 이통사=공시, 선약=선택약정 / 각 구간 MNP·기변 2칸
+  const tiers=[]; for (let i=0;i<6;i++){ const lab=T(g[3]?.[3+2*i]).split('\n')[0]; const sub=T(g[4]?.[3+2*i]).replace(/\n/g,' · '); if(lab) tiers.push({label:lab, sub, col:3+2*i}); }
+  const models=[]; let cur=null;
+  for (let r=9;r<g.length;r++){
+    const a=T(g[r]?.[0]), b=T(g[r]?.[1]), c=T(g[r]?.[2]);
+    if (/010 신규|^모델명/.test(a) && r>12) break;
+    if (a && c==='이통사'){ const nm=niceName(a,b); cur = models.some(x=>x.name===nm) ? {code:a,name:nm,v:{},dup:true} : {code:a, name:nm, v:{}}; if(!cur.dup) models.push(cur); }
+    if (!cur || (c!=='이통사' && c!=='선약')) continue;
+    const ct = c==='이통사' ? '공시' : '선택';
+    tiers.forEach((t,i)=>{ (cur.v[i] ??= {})[ct] = { mnp:num(g[r][t.col]), gb:num(g[r][t.col+1]) }; });
+  }
+  return { tiers, models, hasCT:true, hasSubsidy:false };
+}
+function parseLGA2(g){
+  // 2행: 구간(B,E,H) / 3행: 010·MNP·기변 / 4행부터 기종
+  const tiers=[]; for (let i=0;i<3;i++){ const lab=T(g[1]?.[1+3*i]).split('\n')[0]; if(lab) tiers.push({label:lab, sub:'', col:1+3*i}); }
+  const models=[];
+  for (let r=3;r<Math.min(g.length,40);r++){
+    const a=T(g[r]?.[0]);
+    if (!a || a.length>24 || num(g[r]?.[2])===null) continue;
+    const nm=cleanName(a); if (models.some(x=>x.name===nm)) continue;
+    const m={code:a, name:nm, v:{}};
+    tiers.forEach((t,i)=>{ m.v[i]={ 전체:{ mnp:num(g[r][t.col+1]), gb:num(g[r][t.col+2]) } }; });
+    models.push(m);
+  }
+  return { tiers, models, hasCT:false, hasSubsidy:false };
+}
+function parseSK(g){
+  // '모델명' 줄마다 표가 하나. 구간마다 7칸: 010공시,010선택,지원금,MNP공시,MNP선택,기변공시,기변선택 (천원 단위)
+  const tiers=[], models=new Map();
+  for (let r=0;r<g.length;r++){
+    if (T(g[r]?.[0])!=='모델명') continue;
+    const cols=[]; (g[r]||[]).forEach((v,c)=>{ if (/요금제 구간/.test(T(v))) cols.push({c, label:T(v).split('\n')[1]||T(v)}); });
+    const idx = cols.map(t => { let i=tiers.findIndex(x=>x.label===t.label); if(i<0){ tiers.push({label:t.label, sub:''}); i=tiers.length-1; } return i; });
+    for (let rr=r+3; rr<g.length; rr++){
+      const a=T(g[rr]?.[0]);
+      if (!a || !/^[A-Z][A-Z0-9_\-]+$/i.test(a)) break;
+      const name=niceName(a,'');
+      if (!models.has(name)) models.set(name,{code:a, name, v:{}});
+      const m=models.get(name);
+      cols.forEach((t,k)=>{
+        const ti=idx[k]; if (m.v[ti]) return;      // 같은 기종은 첫 용량만
+        const x=j=>num(g[rr][t.c+j]);
+        const s=x(2);
+        m.v[ti]={ 공시:{ mnp:x(3)!=null?x(3)/10:null, gb:x(5)!=null?x(5)/10:null, sub:s!=null?s/10:null },
+                  선택:{ mnp:x(4)!=null?x(4)/10:null, gb:x(6)!=null?x(6)/10:null } };
+      });
+    }
+  }
+  return { tiers, models:[...models.values()], hasCT:true, hasSubsidy:true };
+}
+
+/* ---------- 상태 ---------- */
+let BOOK=null, DATA=null, P=null;
+const S = { tier:0, ct:'공시', mode:'disc', margin:20, sel:new Set(), per:{} };
+const PRICE = store.get('dsd_price',{});   // 출고가·공시지원금(만원) 기억
+
+function gridOf(ws){
+  const rg=XLSX.utils.decode_range(ws['!ref']||'A1'); const g=[];
+  for (let r=0;r<=rg.e.r;r++){ const row=[]; for (let c=0;c<=rg.e.c;c++){ const cell=ws[XLSX.utils.encode_cell({r,c})]; row.push(cell?cell.v:null); } g.push(row); }
+  return g;
+}
+function loadBook(names, getGrid){
+  BOOK={names, getGrid};
+  const sel=$('#sheet'); sel.innerHTML='';
+  const ok=names.filter(n=>PARSERS.some(p=>p.test(n))), no=names.filter(n=>!PARSERS.some(p=>p.test(n)));
+  sel.innerHTML = '<option value="">— 시트를 고르세요 —</option>'
+    + ok.map(n=>`<option value="${esc(n)}">✅ ${esc(n)}</option>`).join('')
+    + no.map(n=>`<option value="${esc(n)}" disabled>⛔ ${esc(n)}</option>`).join('');
+  $('#sheetHint').textContent = `✅ 표를 만들 수 있는 시트 ${ok.length}개 · ⛔ 단가표가 그림이거나 비어 있어 읽을 수 없는 시트 ${no.length}개`;
+  $('#c2').hidden=false; ['#c3','#c4','#c5'].forEach(s=>$(s).hidden=true);
+  const last=store.get('dsd_sheet',''); if (ok.includes(last)){ sel.value=last; pickSheet(); }
+}
+function pickSheet(){
+  const n=$('#sheet').value; if(!n){ ['#c3','#c4','#c5'].forEach(s=>$(s).hidden=true); return; }
+  P=PARSERS.find(p=>p.test(n));
+  try { DATA=P.run(BOOK.getGrid(n)); } catch(e){ console.error(e); toast('이 시트는 모양이 바뀌어서 읽지 못했어요'); return; }
+  if (!DATA.models.length){ toast('이 시트에서 기종을 찾지 못했어요'); return; }
+  store.set('dsd_sheet',n);
+  $('#carrier').value=P.carrier;
+  $('#tier').innerHTML=DATA.tiers.map((t,i)=>`<option value="${i}">${esc(t.label)}${t.sub?' ('+esc(t.sub.slice(0,30))+')':''}</option>`).join('');
+  S.tier=0; $('#tierName').value=DATA.tiers[0]?.label||''; S.ct = DATA.hasCT ? (S.ct==='전체'?'공시':S.ct) : '전체';
+  $$('#ct button').forEach(x=>x.classList.toggle('on',x.dataset.v===S.ct));
+  $('#ctWrap').hidden=!DATA.hasCT;
+  S.sel=new Set(DATA.models.filter(m=>HOT.test(m.name)).map(m=>m.name));
+  if (!S.sel.size) DATA.models.slice(0,6).forEach(m=>S.sel.add(m.name));
+  S.per={};
+  ['#c3','#c4','#c5'].forEach(s=>$(s).hidden=false);
+  render();
+}
+
+/* ---------- 계산 ---------- */
+function rowCalc(m){
+  const ct = DATA.hasCT ? S.ct : '전체';
+  const v = m.v[S.tier]?.[ct] || {};
+  const mg = S.per[m.name] ?? S.margin;
+  const disc = x => x==null ? null : Math.max(0, Math.round((x-mg)*10)/10);
+  const pr = PRICE[m.name] || {};
+  const release = num(pr.rel);
+  const subsidy = ct==='공시' ? (num(pr.sub) ?? (v.sub ?? null)) : 0;
+  const price = d => (d==null || release==null || (ct==='공시' && subsidy==null)) ? null : Math.max(0, Math.round((release-subsidy-d)*10)/10);
+  const dM=disc(v.mnp), dG=disc(v.gb);
+  return { hqM:v.mnp, hqG:v.gb, mg, dM, dG, pM:price(dM), pG:price(dG), release, subsidy, autoSub:v.sub };
+}
+const f1 = n => (Math.round(n*10)/10).toLocaleString('ko-KR');
+
+/* ---------- 그리기 ---------- */
+function render(){
+  if(!DATA) return;
+  $('#modeHint').textContent = S.mode==='disc'
+    ? '손님에게 "추가 할인 ○○만원"으로 보여 줘요. (통신사 지원금과 별도)'
+    : '손님에게 "실구매가(할부원금)"로 보여 줘요. 아래 표에 출고가를 한 번만 넣어 두면 기억해요.';
+  // 관리표
+  const pr = S.mode==='price';
+  const needSub = pr && S.ct==='공시';
+  let h=`<tr><th></th><th>기종</th><th>본사<br>이동/기변</th><th>내 몫</th>${pr?'<th>출고가</th>'+(needSub?'<th>공시</th>':''):''}<th>손님<br>이동/기변</th></tr>`;
+  DATA.models.forEach((m,i)=>{
+    const c=rowCalc(m), on=S.sel.has(m.name);
+    const hq = `${c.hqM??'–'} / ${c.hqG??'–'}`;
+    const cu = pr ? [c.pM,c.pG] : [c.dM,c.dG];
+    const cuTxt = cu.map(x=>x==null?'–':f1(x)).join(' / ');
+    h+=`<tr><td><input type="checkbox" data-i="${i}" ${on?'checked':''}></td>
+      <td class="nm">${esc(m.name)}<small>${esc(m.code)}</small></td>
+      <td class="hq">${hq}</td>
+      <td><input class="mini" type="number" inputmode="decimal" data-mg="${i}" value="${c.mg}"></td>
+      ${pr?`<td><input class="mini" type="number" inputmode="decimal" data-rel="${i}" value="${c.release??''}" placeholder="만원"></td>`
+          +(needSub?`<td><input class="mini" type="number" inputmode="decimal" data-sub="${i}" value="${PRICE[m.name]?.sub ?? (c.autoSub??'')}" placeholder="만원"></td>`:''):''}
+      <td class="cu ${cu.every(x=>!x)?'zero':''}">${cuTxt}</td></tr>`;
+  });
+  $('#admin').innerHTML=h;
+  poster();
+}
+function poster(){
+  const d=new Date(), ds=`${d.getMonth()+1}/${d.getDate()} 기준`;
+  $('#pDate').textContent=ds;
+  const tier=$('#tierName').value.trim();
+  const ctTxt = !DATA.hasCT ? '' : (S.ct==='공시' ? '공시지원금' : '선택약정 25% 요금할인');
+  $('#pTitle').textContent = S.mode==='disc' ? '이번 주 추가 할인표' : '이번 주 실구매가';
+  $('#pCond').innerHTML=[ $('#carrier').value, tier && `${tier} 요금제`, ctTxt ].filter(Boolean).map(t=>`<span>${esc(t)}</span>`).join('');
+  const rows=DATA.models.filter(m=>S.sel.has(m.name));
+  const lbl = S.mode==='disc' ? '추가 할인' : '할부원금';
+  const cell = x => x==null ? `<span class="p-val ask">상담 문의</span>`
+    : (S.mode==='disc'
+        ? (x>0 ? `<span class="p-val">${f1(x)}만원</span><span class="p-lbl">${lbl}</span>` : `<span class="p-val ask">상담 문의</span>`)
+        : `<span class="p-val">${x>0?f1(x)+'만원':'0원'}</span><span class="p-lbl">${lbl}</span>`);
+  const best = Math.max(...rows.map(m=>{ const c=rowCalc(m); return S.mode==='disc'?Math.max(c.dM??0,c.dG??0):0; }));
+  let bestUsed=false;
+  $('#pTbl').innerHTML = rows.length
+    ? `<tr><th>기종</th><th>번호이동</th><th>기기변경</th></tr>` + rows.map(m=>{
+        const c=rowCalc(m), v=S.mode==='disc'?[c.dM,c.dG]:[c.pM,c.pG];
+        const hot = !bestUsed && S.mode==='disc' && best>0 && Math.max(v[0]??0,v[1]??0)===best;
+        if (hot) bestUsed=true;
+        return `<tr><td>${esc(m.name)}${hot?'<span class="p-hot">BEST</span>':''}</td><td>${cell(v[0])}</td><td>${cell(v[1])}</td></tr>`;
+      }).join('')
+    : `<tr><td class="empty" colspan="3">위 4번에서 기종을 골라 주세요</td></tr>`;
+  const notes=[
+    S.mode==='disc' ? '※ 통신사 지원금과 별도로 드리는 다쏜다 추가 할인 금액이에요.' : '※ 출고가에서 지원금·추가 할인을 뺀 할부원금이에요.',
+    `※ ${tier?tier+' 요금제 기준, ':''}요금제·약정 유지 조건이 있어요. 자세한 조건은 상담 때 안내드려요.`,
+    '※ 통신사 정책·재고에 따라 매일 바뀔 수 있어요. 가입은 온라인으로 간편하게!'
+  ];
+  $('#pNote').innerHTML=notes.map(esc).join('<br>');
+}
+
+/* ---------- 이벤트 ---------- */
+$('#xl').addEventListener('change', async e=>{
+  const f=e.target.files[0]; if(!f) return;
+  $('#st').className='status'; $('#st').textContent='읽는 중이에요… (큰 파일은 10초쯤 걸려요)';
+  try{
+    if (typeof XLSX==='undefined') throw new Error('엑셀 읽기 도구를 못 불러왔어요. 인터넷 연결을 확인해 주세요.');
+    const wb=XLSX.read(await f.arrayBuffer(), {type:'array', cellStyles:false, cellHTML:false, cellFormula:false});
+    loadBook(wb.SheetNames, n=>gridOf(wb.Sheets[n]));
+    $('#st').className='status ok'; $('#st').textContent=`✅ ${f.name} · 시트 ${wb.SheetNames.length}개를 읽었어요`;
+  }catch(err){ console.error(err); $('#st').className='status err'; $('#st').textContent='❌ '+(err.message||'파일을 읽지 못했어요'); }
+});
+$('#sheet').addEventListener('change', pickSheet);
+$('#tier').addEventListener('change', e=>{ S.tier=+e.target.value; $('#tierName').value=DATA.tiers[S.tier]?.label||''; render(); });
+$('#tierName').addEventListener('input', poster);
+$('#carrier').addEventListener('change', poster);
+$('#margin').addEventListener('input', e=>{ S.margin=num(e.target.value)??0; S.per={}; render(); });
+$$('#ct button').forEach(b=>b.addEventListener('click',()=>{ $$('#ct button').forEach(x=>x.classList.toggle('on',x===b)); S.ct=b.dataset.v; render(); }));
+$$('#mode button').forEach(b=>b.addEventListener('click',()=>{ $$('#mode button').forEach(x=>x.classList.toggle('on',x===b)); S.mode=b.dataset.v; render(); }));
+$$('.quick button').forEach(b=>b.addEventListener('click',()=>{
+  const q=b.dataset.q;
+  S.sel = q==='all' ? new Set(DATA.models.map(m=>m.name)) : q==='none' ? new Set() : new Set(DATA.models.filter(m=>HOT.test(m.name)).map(m=>m.name));
+  render();
+}));
+$('#admin').addEventListener('change', e=>{
+  const t=e.target, m=DATA.models[t.dataset.i ?? t.dataset.mg ?? t.dataset.rel ?? t.dataset.sub];
+  if (!m) return;
+  if (t.type==='checkbox'){ t.checked?S.sel.add(m.name):S.sel.delete(m.name); }
+  else if ('mg' in t.dataset){ S.per[m.name]=num(t.value)??0; }
+  else { const k='rel' in t.dataset?'rel':'sub'; (PRICE[m.name] ??= {})[k]=t.value; store.set('dsd_price',PRICE); }
+  render();
+});
+$('#save').addEventListener('click', async ()=>{
+  if (typeof html2canvas==='undefined'){ toast('이미지 도구를 못 불러왔어요. 화면을 캡처해 주세요'); return; }
+  try{
+    await (document.fonts?.ready||Promise.resolve());
+    const cv=await html2canvas($('#poster'),{scale:2.5, backgroundColor:'#ffffff', useCORS:true});
+    const blob=await new Promise(r=>cv.toBlob(r,'image/png'));
+    const name=`다쏜다_혜택표_${new Date().toISOString().slice(0,10)}.png`;
+    const file=new File([blob],name,{type:'image/png'});
+    if (navigator.canShare && navigator.canShare({files:[file]})){ await navigator.share({files:[file], title:'다쏜다 혜택표'}); return; }
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; a.click();
+    toast('이미지를 저장했어요');
+  }catch(e){ if (e.name!=='AbortError'){ console.error(e); toast('저장이 안 되면 화면을 캡처해 주세요'); } }
+});
+$('#copy').addEventListener('click', async ()=>{
+  const d=new Date(), tier=$('#tierName').value.trim();
+  const lines=[`📢 다쏜다 전주장동점 ${d.getMonth()+1}/${d.getDate()} 혜택`, `📶 ${$('#carrier').value}${tier?' · '+tier+' 요금제':''}${DATA.hasCT?' · '+(S.ct==='공시'?'공시지원금':'선택약정'):''}`,
+    `(${S.mode==='disc'?'추가 할인':'할부원금'} · 번호이동 / 기기변경)`, ''];
+  DATA.models.filter(m=>S.sel.has(m.name)).forEach(m=>{
+    const c=rowCalc(m), v=S.mode==='disc'?[c.dM,c.dG]:[c.pM,c.pG];
+    const t=x=> x==null||(S.mode==='disc'&&x<=0) ? '문의' : (S.mode==='price'&&x<=0?'0원':f1(x)+'만');
+    lines.push(`📱 ${m.name}  ${t(v[0])} / ${t(v[1])}`);
+  });
+  lines.push('', '※ 요금제·약정 유지 조건 있음 · 매일 변동', '📞 010-2069-5220 · 상담은 전화·카톡, 가입은 온라인');
+  const txt=lines.join('\n');
+  try{ await navigator.clipboard.writeText(txt); toast('복사했어요. 카톡에 붙여 넣으세요'); }
+  catch(e){ prompt('아래 글을 길게 눌러 복사하세요', txt); }
+});
+
+/* 테스트용 (개발자만 사용) */
+window.__dsdLoad = grids => loadBook(Object.keys(grids), n=>grids[n]);
+})();
+</script>
+</body>
+</html>
