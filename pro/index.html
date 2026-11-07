@@ -24,7 +24,7 @@ button,input,select{font:inherit;color:inherit}
 .top h1{font-size:18px;font-weight:850;display:flex;justify-content:space-between;align-items:center}
 .top h1 small{font-size:12px;font-weight:600;opacity:.7}
 .tabs{display:flex;gap:4px;margin-top:10px}
-.tabs button{flex:1;height:44px;border:0;background:none;color:rgba(255,255,255,.6);font-weight:800;font-size:15px;border-bottom:3px solid transparent;cursor:pointer}
+.tabs button{flex:1;height:44px;border:0;background:none;color:rgba(255,255,255,.6);font-weight:800;font-size:13.5px;white-space:nowrap;padding:0 2px;border-bottom:3px solid transparent;cursor:pointer}
 .tabs button.on{color:#fff;border-color:var(--o)}
 .wrap{max-width:640px;margin:0 auto;padding:14px 14px 80px}
 .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px}
@@ -126,6 +126,21 @@ label.f{display:block;font-size:12.5px;font-weight:700;color:var(--ink2);margin:
 .rawt td:first-child{text-align:left;font-weight:700}
 .rawt td b{color:var(--od)}
 .dataBox{margin-top:12px;background:#F4F2EF;border-radius:12px;padding:10px 12px;font-size:13.5px;font-weight:700;color:var(--ink2)}
+.bthumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.bthumbs img,.bthumbs video{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:10px;background:#eee;display:block}
+.warnline{font-size:12.5px;color:#8A6200;background:#FFF8E6;border-radius:10px;padding:8px 10px;margin-top:10px}
+.onlyNew{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:700;margin-top:10px}
+.onlyNew input{width:20px;height:20px;accent-color:var(--o)}
+.bitem .top2{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
+.bitem .top2 b{font-size:15px}
+.bitem .cat{font-size:11.5px;font-weight:800;color:#fff;background:var(--navy);padding:3px 8px;border-radius:999px;white-space:nowrap}
+.bitem .meta{font-size:12px;color:var(--mute);margin-top:6px}
+.bitem .txt{font-size:13px;color:var(--ink2);white-space:pre-wrap;background:#F7F7FA;border-radius:10px;padding:8px 10px;margin-top:8px;max-height:110px;overflow:auto}
+.bitem .acts{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}
+.bitem .acts .btn{height:42px;font-size:14px}
+.posted{display:flex;gap:6px;margin-top:8px}
+.posted button{flex:1;height:36px;border-radius:10px;border:1.5px solid var(--line);background:#fff;font-size:13px;font-weight:800;cursor:pointer}
+.posted button.on{background:#E7F7EF;border-color:#0E9F6E;color:#0E7A55}
 .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;background:var(--ink);color:#fff;font-size:14px;font-weight:600;padding:12px 16px;border-radius:12px;max-width:90%;text-align:center;transition:.3s;pointer-events:none;z-index:50}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 </style>
@@ -148,7 +163,7 @@ label.f{display:block;font-size:12.5px;font-weight:700;color:var(--ink2);margin:
 <div id="app" hidden>
   <div class="top"><div class="in">
     <h1>다쏜다 시세 도우미 <small id="ver"></small></h1>
-    <div class="tabs"><button data-t="consult" class="on">💬 상담</button><button data-t="poster">🖼️ 홍보</button><button data-t="raw">📑 원본</button><button data-t="set">⚙️ 설정</button></div>
+    <div class="tabs"><button data-t="consult" class="on">💬 상담</button><button data-t="poster">🖼️ 가격표</button><button data-t="box">📦 홍보함</button><button data-t="raw">📑 원본</button><button data-t="set">⚙️ 설정</button></div>
   </div></div>
 
   <div class="wrap">
@@ -172,6 +187,27 @@ label.f{display:block;font-size:12.5px;font-weight:700;color:var(--ink2);margin:
         <button class="btn btn-k" id="copy">📋 카톡용 글로 복사</button>
         <p class="hint">손님용 이미지 오른쪽 아래 <b>No.번호</b>가 코드표와 같아요. 손님이 이미지를 보내오면 그 번호의 코드표를 찾아보세요.</p>
       </div>
+    </section>
+
+    <!-- 홍보함 -->
+    <section data-p="box" hidden>
+      <div class="card">
+        <div class="h">📦 홍보함 <span class="hint" style="font-weight:600">당근·카톡에 올릴 자료를 모아 두는 곳</span></div>
+        <label class="btn btn-o">➕ 사진·홍보물 넣기<input type="file" id="boxFile" accept="image/*,video/*" multiple hidden></label>
+        <div id="boxForm" hidden style="margin-top:12px">
+          <div id="boxPrev" class="bthumbs"></div>
+          <label class="f">종류</label><select class="in2" id="bCat"></select>
+          <label class="f">제목 (나만 보는 이름)</label><input class="in2" id="bTitle" placeholder="예: 11월 렌트카 프로모션">
+          <label class="f">올릴 글 (선택)</label><textarea class="in2" id="bText" rows="4" style="height:auto;padding:10px 12px" placeholder="당근 소식·카톡에 붙여 넣을 글"></textarea>
+          <p class="warnline">⚠️ 수수료·리베이트가 보이는 <b>판매점용 자료</b>는 손님에게 올리지 마세요.</p>
+          <div class="row" style="margin-top:10px"><button class="btn btn-w" id="bCancel">취소</button><button class="btn btn-n" id="bSave">보관하기</button></div>
+        </div>
+      </div>
+      <div class="card" style="padding:12px 14px">
+        <div class="chips" id="boxCats"></div>
+        <label class="onlyNew"><input type="checkbox" id="boxOnlyNew"> 아직 안 올린 것만 보기</label>
+      </div>
+      <div id="boxList"></div>
     </section>
 
     <!-- 원본 -->
@@ -431,11 +467,12 @@ async function doSave(code){
     p.style.transform=t;
     const blob=await new Promise(r=>cv.toBlob(r,'image/png'));
     const d=new Date(), name=`다쏜다_${code?'코드표':'가격표'}_No${posterNo()}.png`, file=new File([blob],name,{type:'image/png'});
+    if(!code) BOX.add({cat:'휴대폰',title:`${posterTitle()} (No.${posterNo()})`,text:priceText(),files:[{name,type:'image/png',blob}]}).catch(()=>{});
     if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:'다쏜다 가격표'});return}
     const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();toast('이미지를 저장했어요');
   }catch(e){p.style.transform=t; if(e.name!=='AbortError'){console.error(e);toast('저장이 안 되면 화면을 캡처해 주세요')}}
 }
-$('#copy').addEventListener('click',async()=>{
+function priceText(){
   const L=[`📢 다쏜다 전주장동점 ${posterTitle()}`,`(${S.ct==='공시'?'공통지원금':'선택약정'} 기준 · 이동/기변 · 할부원금 만원)`,''];
   D.models.filter(m=>S.sel.includes(m.id)).forEach(m=>{
     L.push(`📱 ${m.name}`);
@@ -444,7 +481,10 @@ $('#copy').addEventListener('click',async()=>{
     L.push('');
   });
   L.push('✅ 부가서비스는 선택 (미가입 시 추가금)','✅ 요금제 유지 조건 있음 · 매일 변동','📞 010-2069-5220 · 상담은 전화·카톡, 가입은 온라인');
-  const txt=L.join('\n');
+  return L.join('\n');
+}
+$('#copy').addEventListener('click',async()=>{
+  const txt=priceText();
   try{await navigator.clipboard.writeText(txt);toast('복사했어요. 카톡에 붙여 넣으세요')}catch(e){prompt('길게 눌러 복사하세요',txt)}
 });
 
@@ -488,11 +528,84 @@ document.addEventListener('change',e=>{
   save(); renderAll(true);
 });
 
+/* ---------- 홍보함 (사진은 이 폰 안 저장소에만) ---------- */
+const BOX_CATS=['휴대폰','인터넷·TV','가전렌탈','자동차','이사·청소','인테리어','보험·기타'];
+const BOX=(()=>{
+  let dbp=null;
+  const db=()=>dbp||(dbp=new Promise((res,rej)=>{ const r=indexedDB.open('dsd_box',1);
+    r.onupgradeneeded=()=>r.result.createObjectStore('items',{keyPath:'id',autoIncrement:true});
+    r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error); }));
+  const tx=async(mode,fn)=>{ const d=await db(); return new Promise((res,rej)=>{ const t=d.transaction('items',mode), st=t.objectStore('items'); const out=fn(st); t.oncomplete=()=>res(out&&out.result!==undefined?out.result:out); t.onerror=()=>rej(t.error); }); };
+  return {
+    add:it=>tx('readwrite',st=>st.add(Object.assign({created:Date.now(),posted:{}},it))).then(r=>{renderBox();return r}),
+    put:it=>tx('readwrite',st=>st.put(it)),
+    del:id=>tx('readwrite',st=>st.delete(id)),
+    all:()=>tx('readonly',st=>st.getAll()),
+  };
+})();
+try{ navigator.storage&&navigator.storage.persist&&navigator.storage.persist(); }catch(e){}
+let boxCat='전체', pending=[], urls=[];
+$('#bCat').innerHTML=BOX_CATS.map(c=>`<option>${c}</option>`).join('');
+$('#boxFile').addEventListener('change',e=>{
+  pending=[...e.target.files]; e.target.value=''; if(!pending.length) return;
+  $('#boxPrev').innerHTML=pending.map(f=>{const u=URL.createObjectURL(f);return f.type.startsWith('video')?`<video src="${u}" muted></video>`:`<img src="${u}" alt="">`}).join('');
+  $('#bTitle').value=''; $('#bText').value=''; $('#boxForm').hidden=false;
+});
+$('#bCancel').onclick=()=>{pending=[];$('#boxForm').hidden=true;};
+$('#bSave').onclick=async()=>{
+  if(!pending.length) return;
+  try{
+    await BOX.add({cat:$('#bCat').value,title:$('#bTitle').value.trim()||pending[0].name,text:$('#bText').value.trim(),
+      files:pending.map(f=>({name:f.name,type:f.type,blob:f}))});
+    pending=[]; $('#boxForm').hidden=true; toast('홍보함에 넣었어요');
+  }catch(err){ console.error(err); toast('저장 공간이 부족하거나 저장할 수 없어요'); }
+};
+$('#boxOnlyNew').onchange=renderBox;
+async function renderBox(){
+  let items=[]; try{ items=await BOX.all(); }catch(e){ $('#boxList').innerHTML='<div class="card hint">이 폰에서는 홍보함을 쓸 수 없어요.</div>'; return; }
+  const cnt=c=>items.filter(i=>c==='전체'||i.cat===c).length;
+  $('#boxCats').innerHTML=['전체',...BOX_CATS].map(c=>`<button data-bc="${c}" class="${c===boxCat?'on':''}">${c} ${cnt(c)}</button>`).join('');
+  $$('#boxCats button').forEach(b=>b.onclick=()=>{boxCat=b.dataset.bc;renderBox()});
+  urls.forEach(u=>URL.revokeObjectURL(u)); urls=[];
+  const only=$('#boxOnlyNew').checked;
+  const list=items.filter(i=>(boxCat==='전체'||i.cat===boxCat)&&(!only||!(i.posted&&(i.posted.당근||i.posted.카톡)))).sort((a,b)=>b.created-a.created);
+  $('#boxList').innerHTML = list.length ? list.map(i=>{
+    const th=(i.files||[]).slice(0,8).map(f=>{const u=URL.createObjectURL(f.blob);urls.push(u);return (f.type||'').startsWith('video')?`<video src="${u}" muted></video>`:`<img src="${u}" alt="">`}).join('');
+    const d=new Date(i.created), ps=i.posted||{};
+    return `<div class="card bitem" data-id="${i.id}">
+      <div class="top2"><b>${esc(i.title)}</b><span class="cat">${esc(i.cat)}</span></div>
+      <div class="bthumbs">${th}</div>
+      ${i.text?`<div class="txt">${esc(i.text)}</div>`:''}
+      <div class="meta">${d.getMonth()+1}/${d.getDate()} 보관 · 사진 ${(i.files||[]).length}장</div>
+      <div class="posted"><button data-p="당근" class="${ps.당근?'on':''}">${ps.당근?'✅':'⬜'} 당근에 올림</button><button data-p="카톡" class="${ps.카톡?'on':''}">${ps.카톡?'✅':'⬜'} 카톡에 올림</button></div>
+      <div class="acts"><button class="btn btn-o" data-a="share">📤 보내기</button><button class="btn btn-k" data-a="copy">📋 글 복사</button></div>
+      <button class="btn btn-w" data-a="del" style="margin-top:6px;height:38px;font-size:13px;color:#B0B5BF">삭제</button>
+    </div>`;}).join('') : `<div class="card hint" style="text-align:center;padding:24px">${only?'안 올린 자료가 없어요 👍':'아직 보관한 자료가 없어요. 위에서 ➕를 눌러 넣어 보세요.'}</div>`;
+}
+$('#boxList').addEventListener('click',async e=>{
+  const card=e.target.closest('.bitem'); if(!card) return;
+  const id=+card.dataset.id, items=await BOX.all(), it=items.find(x=>x.id===id); if(!it) return;
+  const b=e.target.closest('button'); if(!b) return;
+  if(b.dataset.p){ it.posted=it.posted||{}; it.posted[b.dataset.p]=it.posted[b.dataset.p]?0:Date.now(); await BOX.put(it); renderBox(); return; }
+  if(b.dataset.a==='copy'){ if(!it.text){toast('저장된 글이 없어요');return} try{await navigator.clipboard.writeText(it.text);toast('글을 복사했어요')}catch(err){prompt('길게 눌러 복사하세요',it.text)} return; }
+  if(b.dataset.a==='del'){ if(confirm('이 자료를 홍보함에서 지울까요?')){ await BOX.del(id); renderBox(); } return; }
+  if(b.dataset.a==='share'){
+    const files=(it.files||[]).map(f=>new File([f.blob],f.name||'image.png',{type:f.type||'image/png'}));
+    try{
+      if(it.text){ try{await navigator.clipboard.writeText(it.text)}catch(err){} }
+      if(navigator.canShare&&navigator.canShare({files})){ await navigator.share({files}); if(it.text) toast('글은 복사돼 있어요. 붙여 넣으세요'); return; }
+      files.forEach(f=>{const a=document.createElement('a');a.href=URL.createObjectURL(f);a.download=f.name;a.click();});
+      toast('사진을 저장했어요'+(it.text?' · 글도 복사했어요':''));
+    }catch(err){ if(err.name!=='AbortError') toast('보내기를 할 수 없어요'); }
+  }
+});
+
 /* ---------- 탭 ---------- */
 $$('.tabs button').forEach(b=>b.onclick=()=>{
   $$('.tabs button').forEach(x=>x.classList.toggle('on',x===b));
   $$('[data-p]').forEach(s=>s.hidden=s.dataset.p!==b.dataset.t);
   if(b.dataset.t==='poster') requestAnimationFrame(fitPoster);
+  if(b.dataset.t==='box') renderBox();
   window.scrollTo(0,0);
 });
 function renderAll(keepSettings){ renderPick(); renderRecs(); renderPoster(); renderRaw(); if(!keepSettings) renderSettings(); }
