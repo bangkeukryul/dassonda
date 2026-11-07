@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>다쏜다 전주장동점 | 혁신도시·송천동 찾아가는 통신비 절감 상담</title>
-<meta name="description" content="새는 돈 막아주는 통신비 절감 컨설팅. 전주 혁신도시·송천동 휴대폰·인터넷·가전렌탈 찾아가는 상담. 당근 보고 왔다고 하시면 사은품 추가!">
+<title>다쏜다 전주장동점 | 혁신도시·송천동 전화·카톡 통신비 절감 상담</title>
+<meta name="description" content="새는 돈 막아주는 통신비 절감 컨설팅. 전주 혁신도시·송천동 휴대폰·인터넷·가전렌탈 전화·카톡 상담. 당근 보고 왔다고 하시면 사은품 추가!">
 <!-- 카톡·당근에 링크 붙였을 때 보이는 미리보기 -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="다쏜다 전주장동점 · 당근 이웃 전용 혜택">
@@ -21,15 +21,13 @@
    ===================================================================== */
 const SETTINGS = {
   storeName : "다쏜다 전주장동점",
-  phone     : "010-2069-5220",   // ★ 매장 전화번호 (전화 버튼)
+  phone     : "010-2069-5220",   // ★ 상담 전화번호 (전화 버튼)
   smsPhone  : "010-2069-5220",   // ★ 상담 문자 받을 휴대폰 번호 (신청서·문자 버튼)
   manager   : "방극률",           // 점장 이름
   area      : "혁신도시·송천동", // 주로 상담하는 동네 (맨 위 띠·첫 화면에 표시)
   kakaoUrl  : "https://pf.kakao.com/_nqxmjX/chat",     // 카카오톡 채널 1:1 상담
   kakaoAdd  : "https://pf.kakao.com/_nqxmjX/friend",   // 카카오톡 채널 친구 추가
-  mapUrl    : "https://map.kakao.com/?q=전주시 덕진구 사근1길 73", // 길찾기 버튼
   daangnUrl : "",                 // 당근 비즈프로필 주소 (넣으면 '당근 후기 보기' 버튼이 생겨요)
-  address   : "전북 전주시 덕진구 사근1길 73 (송천동 상담 사무실)", // ★ 손님이 실제로 찾아오는 곳
   awards    : "다쏜다 브랜드 · 2026 대한민국 베스트 브랜드 대상 · 2025 소비자만족지수 1위", // 비우면 숨김
   approvalUrl: "",                // 사전승낙 인증 확인 링크 (본사에서 받으면 넣기) — 넣으면 '인증 확인' 버튼 생김
   approval  : "",                 // ★ 사전승낙 정보 (예: "사전승낙번호 000000 · 다쏜다 전주장동점"). 넣으면 맨 아래에 표시
@@ -53,15 +51,16 @@ const IMAGES = {
   internet: "internet.jpg",  // 인터넷+TV
   mvno    : "mvno.jpg",      // 알뜰폰
   rental  : "rental.jpg",    // 가전 렌탈
-  store1  : "store1.jpg",    // 점장 얼굴 사진 (채널 소식에 올린 그 사진처럼)
-  store2  : "store2.jpg"     // 상담하는 모습 또는 사무실 사진
+  store1  : "store1.jpg",    // 점장 사진 (채널 소식에 올린 그 사진처럼)
+  store2  : "store2.jpg"     // 전화·카톡 상담하는 모습
 };
 
 /* 우리 약속 — ★ 실제로 지키는 것만 남기세요. 다른 매장 예시: "카드 발급 강요 없음", "기기 반납 조건 없음" */
 const PROMISES = [
   "견적만 받아도 OK",
   "최종 부담금까지 계산",
-  "찾아가는 상담",
+  "상담은 전화·카톡으로",
+  "가입은 온라인으로 간편하게",
   // "카드 발급 강요 없음",
   // "기기 반납 조건 없음",
   // "부가서비스 강요 없음",
@@ -299,7 +298,7 @@ body.edit .editpanel{display:block}
 <body>
 <div class="wrap">
 
-  <div class="topbar">🥕 당근 이웃 전용 · 전주 <span class="js-area">혁신도시·송천동</span> 찾아가는 상담</div>
+  <div class="topbar">🥕 당근 이웃 전용 · 전주 <span class="js-area">혁신도시·송천동</span> 전화·카톡 상담</div>
 
   <!-- 1. 첫 화면 -->
   <header class="hero">
@@ -310,7 +309,7 @@ body.edit .editpanel{display:block}
       <div class="kicker">새는 돈 막아주는 통신비 절감 컨설팅</div>
       <h1>휴대폰 바꿀 때 됐다면,<br><em>요금부터</em> 같이 봐 드릴게요</h1>
       <p>기기값 할인 · 요금제 정리 · 사은품까지 한 번에 상담</p>
-      <div class="chips"><span>기기변경·번호이동</span><span>인터넷+TV</span><span>알뜰폰</span><span>가전 렌탈</span><span>🚗 찾아가는 상담</span></div>
+      <div class="chips"><span>기기변경·번호이동</span><span>인터넷+TV</span><span>알뜰폰</span><span>가전 렌탈</span><span>📱 온라인 간편 가입</span></div>
     </div>
   </header>
   <div class="hero-cta">
@@ -325,7 +324,7 @@ body.edit .editpanel{display:block}
       <div class="left">
         <b>🥕 당근 이웃 전용 쿠폰</b>
         <strong class="js-bonus">사은품 추가 증정</strong>
-        <small>상담할 때 <q>“당근 보고 왔어요”</q> 한마디면 끝!<br>이 화면을 캡처해서 보여 주셔도 돼요.</small>
+        <small>전화·카톡으로 <q>“당근 보고 연락드려요”</q> 한마디면 끝!<br>이 화면을 캡처해서 카톡으로 보내 주셔도 돼요.</small>
         <span class="until js-until" hidden></span>
       </div>
       <div class="ph" data-img="gift" data-emoji="🎁"><img alt="사은품"></div>
@@ -400,14 +399,14 @@ body.edit .editpanel{display:block}
     <div class="steps">
       <div class="step"><div class="n">1</div><div><strong>문의 남기기</strong><span>전화·문자·카톡 중 편한 걸로</span></div></div>
       <div class="step"><div class="n">2</div><div><strong>맞춤 견적 안내</strong><span>지금 쓰는 요금·약정을 보고 계산해 드려요</span></div></div>
-      <div class="step"><div class="n">3</div><div><strong>만나서 개통</strong><span>사무실로 오셔도, 댁 근처로 찾아가도 돼요. 본인 신분증만 챙겨 주세요</span></div></div>
+      <div class="step"><div class="n">3</div><div><strong>온라인으로 간편 가입</strong><span>보내 드리는 온라인 가입 신청서로 어디서든 가입해요. 어디 오실 필요 없어요</span></div></div>
     </div>
   </section>
 
-  <!-- 6. 매장 사진 -->
+  <!-- 6. 점장 소개 -->
   <section class="reveal" style="padding-top:0">
     <span class="eyebrow">WHO</span>
-    <h2>얼굴 보고 상담하는<br>동네 점장이에요</h2>
+    <h2>점장이 직접<br>상담해 드려요</h2>
     <p class="lead">점장 <b class="js-manager">방극률</b>이 직접 상담해요. 개통 후에도 궁금한 건 언제든 연락 주세요.</p>
     <div class="gallery">
       <div class="ph" data-img="store1" data-emoji="🙋‍♂️"><img alt="점장 사진"></div>
@@ -464,35 +463,35 @@ body.edit .editpanel{display:block}
     <span class="eyebrow">FAQ</span>
     <h2>자주 물어보세요</h2>
     <div class="faq">
-      <details><summary>상담만 받아도 되나요?</summary><p>그럼요. 견적만 듣고 가셔도 괜찮아요. 부담 없이 물어보세요.</p></details>
+      <details><summary>상담만 받아도 되나요?</summary><p>그럼요. 견적만 받아 보셔도 괜찮아요. 부담 없이 물어보세요.</p></details>
       <details><summary>할부가 남았는데 바꿀 수 있나요?</summary><p>남은 할부와 약정을 먼저 확인해서, 지금 바꾸는 게 이득인지 계산해 드려요.</p></details>
       <details><summary>인터넷 위약금이 걱정돼요</summary><p>해지 위약금까지 따져 보고 안내해 드려요. 약정 만료일을 모르셔도 같이 확인해 드려요.</p></details>
-      <details><summary>매장에 꼭 가야 하나요?</summary><p>아니요. 송천동 상담 사무실로 오셔도 되고, 시간 맞춰 댁 근처로 찾아가서 상담해 드려요.</p></details>
-      <details><summary>개통하러 갈 때 뭘 챙겨요?</summary><p>본인 신분증을 챙겨 오세요. 가족 명의로 개통하실 땐 필요한 서류가 다르니 미리 문의 주세요.</p></details>
+      <details><summary>어디로 가야 하나요?</summary><p>어디 오실 필요 없어요. 상담은 전화·카톡으로 하고, 가입은 온라인 신청서로 진행해요.</p></details>
+      <details><summary>가입은 어떻게 해요?</summary><p>상담이 끝나면 온라인 가입 신청서를 보내 드려요. 본인 확인도 신청서 안에서 안내에 따라 하시면 돼요. 가족 명의로 가입하실 땐 미리 문의 주세요.</p></details>
     </div>
   </section>
 
-  <!-- 10. 매장 안내 -->
+  <!-- 10. 연락처 안내 -->
   <section class="reveal" style="padding-top:8px">
     <div class="info">
-      <span class="eyebrow">VISIT</span>
+      <span class="eyebrow">CONTACT</span>
       <h2 class="js-name">다쏜다 전주장동점</h2>
       <dl>
-        <div><dt>상담 장소</dt><dd class="js-addr"></dd></div>
-        <div><dt>상담 지역</dt><dd><span class="js-area">혁신도시·송천동</span> (찾아가는 상담 가능)</dd></div>
-        <div><dt>영업시간</dt><dd class="js-hours"></dd></div>
+        <div><dt>상담 방법</dt><dd>전화 · 문자 · 카톡 (가입은 온라인)</dd></div>
+        <div><dt>상담 지역</dt><dd><span class="js-area">혁신도시·송천동</span> 이웃 (전주 어디든 가능)</dd></div>
+        <div><dt>상담 시간</dt><dd class="js-hours"></dd></div>
         <div><dt>전화</dt><dd class="js-phone"></dd></div>
       </dl>
       <a class="btn btn-w js-approvalbtn" href="#" target="_blank" rel="noopener" hidden style="margin-top:16px">🔒 판매점 인증 정보 확인</a>
       <div class="row">
-        <a class="btn btn-o js-map" href="#" target="_blank" rel="noopener">🗺️ 길찾기</a>
+        <a class="btn btn-o js-tel" href="#">📞 전화 상담</a>
         <a class="btn btn-k js-kakao" href="#" target="_blank" rel="noopener">💬 카톡 상담</a>
       </div>
       <a class="btn btn-w js-kakaoadd" href="#" target="_blank" rel="noopener" style="margin-top:8px">➕ 카톡 채널 추가하고 혜택 알림 받기</a>
     </div>
   </section>
 
-  <footer><span class="js-biz"></span><br><span class="js-approval"></span>상담 신청 내용은 문자로 매장에 전달되며, 웹사이트에는 저장되지 않습니다.</footer>
+  <footer><span class="js-biz"></span><br><span class="js-approval"></span>상담 신청 내용은 문자로 상담 담당자에게 전달되며, 웹사이트에는 저장되지 않습니다.</footer>
 </div>
 
 <!-- 하단 고정 버튼 -->
@@ -516,10 +515,8 @@ body.edit .editpanel{display:block}
   // 설정값 채우기
   $$('.js-tel').forEach(a => a.href = 'tel:' + telNum);
   $$('.js-kakao').forEach(a => a.href = S.kakaoUrl);
-  $$('.js-map').forEach(a => a.href = S.mapUrl);
   $$('.js-bonus').forEach(e => e.textContent = S.bonus);
   $$('.js-name').forEach(e => e.textContent = S.storeName);
-  $('.js-addr').textContent = S.address;
   $('.js-hours').textContent = S.hoursText;
   $('.js-phone').textContent = S.phone;
   $('.js-biz').textContent = S.bizInfo;
