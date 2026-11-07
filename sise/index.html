@@ -24,7 +24,7 @@ button,input,select{font:inherit;color:inherit}
 .top h1{font-size:18px;font-weight:850;display:flex;justify-content:space-between;align-items:center}
 .top h1 small{font-size:12px;font-weight:600;opacity:.7}
 .tabs{display:flex;gap:4px;margin-top:10px}
-.tabs button{flex:1;height:44px;border:0;background:none;color:rgba(255,255,255,.6);font-weight:800;font-size:13.5px;white-space:nowrap;padding:0 2px;border-bottom:3px solid transparent;cursor:pointer}
+.tabs button{flex:1;height:44px;border:0;background:none;color:rgba(255,255,255,.6);font-weight:800;font-size:12.5px;letter-spacing:-.02em;white-space:nowrap;padding:0 2px;border-bottom:3px solid transparent;cursor:pointer}
 .tabs button.on{color:#fff;border-color:var(--o)}
 .wrap{max-width:640px;margin:0 auto;padding:14px 14px 80px}
 .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px}
@@ -141,6 +141,43 @@ label.f{display:block;font-size:12.5px;font-weight:700;color:var(--ink2);margin:
 .posted{display:flex;gap:6px;margin-top:8px}
 .posted button{flex:1;height:36px;border-radius:10px;border:1.5px solid var(--line);background:#fff;font-size:13px;font-weight:800;cursor:pointer}
 .posted button.on{background:#E7F7EF;border-color:#0E9F6E;color:#0E7A55}
+/* ===== 경쟁사 비교 ===== */
+.vsform textarea{width:100%;min-height:120px;border:1.5px solid var(--line);border-radius:11px;padding:10px 12px;font-size:14px;background:#FCFAF8;font-family:inherit}
+.gt{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}
+.gt th{font-size:11px;color:var(--mute);padding:4px 1px;border-bottom:1px solid var(--line);font-weight:700}
+.gt th.c{font-size:12px;color:var(--ink);font-weight:900}
+.gt td{padding:3px 1px;border-bottom:1px solid #F3EFEB;text-align:center}
+.gt td:first-child{text-align:left;font-weight:700;font-size:11.5px;line-height:1.2;padding-right:3px}
+.gt input{width:100%;min-width:0;height:32px;border:1.5px solid var(--line);border-radius:7px;text-align:center;padding:0 2px;font-size:13.5px;background:#FCFAF8}
+.gt tr.grp td{background:#F4F2EF;font-size:11px;color:var(--mute);font-weight:800}
+.vsSum{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}
+.vsSum div{border-radius:12px;padding:8px 6px;text-align:center;font-size:12px;font-weight:700}
+.vsSum b{display:block;font-size:22px;font-weight:900}
+.vsSum .w{background:#E3F6E8;color:#14833B}.vsSum .t{background:#FFF6CC;color:#8A6800}.vsSum .l{background:#FDE2E1;color:#C62828}
+.vsList{margin-top:10px;font-size:13px;line-height:1.55}
+.vsList h5{font-size:13.5px;font-weight:850;margin:8px 0 2px}
+.vsList li{margin-left:18px}
+#vsWrap{overflow:hidden;border-radius:14px;border:1px solid var(--line);background:#fff}
+#vsBoard{width:720px;background:#fff;transform-origin:0 0;font-family:"Pretendard Variable",Pretendard,sans-serif}
+.vb-h{background:var(--navy);color:#fff;padding:16px 18px 12px}
+.vb-h h2{font-size:26px;font-weight:900;letter-spacing:-.02em}
+.vb-h p{font-size:13.5px;opacity:.85;margin-top:2px}
+.vbt{width:100%;border-collapse:collapse}
+.vbt th{background:var(--navy);color:#fff;font-size:18px;padding:6px;border:1px solid #39405A}
+.vbt td{border:1px solid #DCDFE6;text-align:center;padding:4px 2px;vertical-align:middle}
+.vbt tr.g td{background:#EEF0F5;font-weight:800;font-size:13.5px}
+.vbt td.m{text-align:left;padding-left:8px;font-weight:800;font-size:14px;width:150px;line-height:1.25}
+.vbt td.m small{display:block;font-size:11px;color:var(--mute);font-weight:600}
+.vbt td b{display:block;font-size:17px;font-weight:900}
+.vbt td i{display:block;font-style:normal;font-size:12px;color:#555}
+.vbt td u{display:block;text-decoration:none;font-weight:900;font-size:14px}
+.vbt td.W{background:#DFF5E3}.vbt td.W u{color:#14833B}
+.vbt td.T{background:#FFF6CC}.vbt td.T u{color:#9A7400}
+.vbt td.L{background:#FDE2E1}.vbt td.L u{color:#C62828}
+.vbt td.N{background:#F4F4F4;color:#A0A0A0;font-size:12px}
+.vb-f{padding:10px 14px 14px;font-size:13px;line-height:1.6;color:var(--ink2)}
+.vb-f .lg span{display:inline-block;padding:0 7px;border-radius:4px;font-weight:800;margin-right:3px}
+.vb-f .memo{margin-top:6px;background:#F7F7FA;border-radius:8px;padding:6px 10px;white-space:pre-wrap}
 .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;background:var(--ink);color:#fff;font-size:14px;font-weight:600;padding:12px 16px;border-radius:12px;max-width:90%;text-align:center;transition:.3s;pointer-events:none;z-index:50}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 </style>
@@ -163,7 +200,7 @@ label.f{display:block;font-size:12.5px;font-weight:700;color:var(--ink2);margin:
 <div id="app" hidden>
   <div class="top"><div class="in">
     <h1>다쏜다 시세 도우미 <small id="ver"></small></h1>
-    <div class="tabs"><button data-t="consult" class="on">💬 상담</button><button data-t="poster">🖼️ 가격표</button><button data-t="box">📦 홍보함</button><button data-t="raw">📑 원본</button><button data-t="set">⚙️ 설정</button></div>
+    <div class="tabs"><button data-t="consult" class="on">💬 상담</button><button data-t="poster">🖼️ 가격표</button><button data-t="vs">⚔️ 비교</button><button data-t="box">📦 홍보함</button><button data-t="raw">📑 원본</button><button data-t="set">⚙️ 설정</button></div>
   </div></div>
 
   <div class="wrap">
@@ -187,6 +224,44 @@ label.f{display:block;font-size:12.5px;font-weight:700;color:var(--ink2);margin:
         <button class="btn btn-k" id="copy">📋 카톡용 글로 복사</button>
         <p class="hint">손님용 이미지 오른쪽 아래 <b>No.번호</b>가 코드표와 같아요. 손님이 이미지를 보내오면 그 번호의 코드표를 찾아보세요.</p>
       </div>
+    </section>
+
+    <!-- 경쟁사 비교 -->
+    <section data-p="vs" hidden>
+      <div class="card">
+        <div class="h">⚔️ 경쟁사 비교 <span class="hint" style="font-weight:600">나만 보는 화면</span></div>
+        <div class="chips" id="rvChips"></div>
+        <p class="hint" style="margin-top:8px">경쟁사 가격표 사진을 Claude에게 보내면 <b>붙여넣을 글</b>을 만들어 줘요. 복사해서 ➕ 새 경쟁사 → 붙여넣기 하면 끝.</p>
+      </div>
+      <div class="card vsform" id="rvEdit" hidden>
+        <div class="h" id="rvEditH">경쟁사 넣기</div>
+        <div class="row"><div><label class="f">경쟁사 이름</label><input class="in2" id="rvName" placeholder="예: 북극곰폰"></div>
+          <div><label class="f">날짜</label><input class="in2" id="rvDate" placeholder="11/07"></div></div>
+        <label class="f">① 붙여넣기 (Claude가 만들어 준 글)</label>
+        <textarea id="rvPaste" placeholder="예)&#10;이름: 북극곰폰&#10;S26 -5 -10 -36 -14 -36 -14&#10;S26+ 15 18 -16 12 -9 13&#10;순서: SK이동 SK기변 KT이동 KT기변 LG이동 LG기변"></textarea>
+        <div class="row" style="margin-top:8px"><button class="btn btn-w" id="rvClip">📋 복사한 글 바로 넣기</button><button class="btn btn-n" id="rvParse">글 읽어서 채우기</button></div>
+        <label class="f">② 숫자 확인·직접 입력 (만원 · 비우면 없음)</label>
+        <div style="overflow-x:auto"><table class="gt" id="rvGrid"></table></div>
+        <label class="f">상대 조건 메모 (요금제·부가서비스 등)</label>
+        <textarea id="rvMemo" style="min-height:70px" placeholder="예: KT 12만 요금제, 부가 미가입 7만 추가, LG 6개월 유지"></textarea>
+        <div class="row" style="margin-top:10px"><button class="btn btn-w" id="rvCancel">닫기</button><button class="btn btn-o" id="rvSave">저장하고 비교</button></div>
+        <button class="btn btn-w" id="rvDel" style="margin-top:8px;color:#C62828">이 경쟁사 지우기</button>
+      </div>
+      <div id="vsView">
+        <div class="card">
+          <label class="f" style="margin-top:0">우리 가격을 어떻게 볼까요?</label>
+          <div class="seg" id="vsMode"><button data-v="now">지금 내 가격표</button><button data-v="min">내 이익 0원 최저가</button></div>
+          <p class="hint" id="vsModeHint" style="margin-top:6px"></p>
+          <div class="vsSum" id="vsSum"></div>
+          <div class="vsList" id="vsList"></div>
+        </div>
+        <div id="vsWrap"><div id="vsBoard"></div></div>
+        <div style="display:grid;gap:8px;margin-top:12px">
+          <button class="btn btn-n" id="vsSave">🖼️ 비교표 이미지 저장 (나만 보기)</button>
+          <button class="btn btn-w" id="vsEditBtn">✏️ 이 경쟁사 숫자 고치기</button>
+        </div>
+      </div>
+      <div class="card" id="vsEmpty" hidden><p class="hint">아직 넣은 경쟁사가 없어요. 위의 <b>➕ 새 경쟁사</b>를 눌러 주세요.</p></div>
     </section>
 
     <!-- 홍보함 -->
@@ -600,15 +675,154 @@ $('#boxList').addEventListener('click',async e=>{
   }
 });
 
+
+/* ---------- 경쟁사 비교 ---------- */
+const CELLS=CARR.flatMap(c=>['MNP','기변'].map(t=>[c,t]));
+let RV=LS.get('dsd_rivals',[]), rvCur=LS.get('dsd_rv_cur',null), vsMode=LS.get('dsd_vs_mode','min'), rvEditId=null;
+const saveRV=()=>{LS.set('dsd_rivals',RV);LS.set('dsd_rv_cur',rvCur)};
+const shortName=m=>m.name.replace(/ 256G$/,'').replace(/^갤럭시 /,'');
+const ALIAS=[[/폴드8?울트라|fold8?ultra/,'FO8U'],[/폴드8?|fold8?/,'FO8'],[/플립8?|flip8?/,'FL8'],
+  [/s26울트라|s26ultra|s26u$/,'S26U'],[/s26\+|s26플러스|s26plus|s26p$/,'S26P'],[/s26fe/,'S26FE'],[/s26/,'S26'],
+  [/s25엣지|s25edge|s25e$/,'S25E'],[/s25/,'S25'],
+  [/18프로맥스|18promax|18pm$/,'I18PM'],[/18프로|18pro/,'I18P'],[/듀오|duo/,'IDUO'],
+  [/17프로|17pro/,'I17P'],[/17에어|17air/,'I17A'],[/17e$/,'I17E'],[/(아이폰|iphone)17$|^17$/,'I17'],
+  [/^a17$/,'A17'],[/^a18$/,'A18'],[/버디5|buddy5/,'BUDDY5']];
+function findModel(name){
+  const n=name.toLowerCase().replace(/갤럭시|galaxy|\(와이드\)|와이드|\d+(g|gb|tb)\b|[\s,·:()]/g,'').replace(/^z(?=[가-힣a-z])/,'');
+  if(D.models.some(m=>m.id.toLowerCase()===n)) return D.models.find(m=>m.id.toLowerCase()===n).id;
+  for(const [re,id] of ALIAS) if(re.test(n)) return id;
+  return null;
+}
+function parseRival(txt){
+  const out={name:'',date:'',memo:[],p:{},skip:[]};
+  txt.replace(/\r/g,'').split('\n').forEach(raw=>{
+    const line=raw.trim(); if(!line) return;
+    let mm;
+    if((mm=line.match(/^(이름|경쟁사|업체)\s*[:：]\s*(.+)$/))){out.name=mm[2].trim();return}
+    if((mm=line.match(/^(날짜|일자)\s*[:：]\s*(.+)$/))){out.date=mm[2].trim();return}
+    if((mm=line.match(/^(조건|메모)\s*[:：]\s*(.+)$/))){out.memo.push(mm[2].trim());return}
+    if(/^순서/.test(line)) return;
+    const tk=line.replace(/[−–—]/g,'-').split(/[\s|\t/]+/).filter(Boolean);
+    const isVal=t=>/^-?\d+(\.\d+)?$/.test(t)||/^(-|x|X|없음|문의|공짜)$/.test(t);
+    let i=tk.length; while(i>0&&isVal(tk[i-1])) i--;
+    const vals=tk.slice(i); if(vals.length<6){out.skip.push(line);return}
+    const six=vals.slice(-6), nameTk=tk.slice(0,tk.length-6).filter(t=>!(/^\d[\d,]*$/.test(t)&&+t.replace(/,/g,'')>=1000));
+    const id=findModel(nameTk.join(' ')); if(!id){out.skip.push(line);return}
+    out.p[id]=six.map(t=>/^-?\d+(\.\d+)?$/.test(t)?+t:(t==='공짜'?0:null));
+  });
+  return out;
+}
+function rvGridHTML(p){
+  const groups=[...new Set(D.models.map(m=>m.group))];
+  return `<tr><th></th>${CARR.map(c=>`<th class="c" colspan="2">${c}</th>`).join('')}</tr><tr><th>기종</th>${CARR.map(()=>'<th>이동</th><th>기변</th>').join('')}</tr>`+
+    groups.map(g=>`<tr class="grp"><td colspan="7">${esc(g)}</td></tr>`+D.models.filter(m=>m.group===g).map(m=>{
+      const v=p[m.id]||[];
+      return `<tr><td>${esc(shortName(m))}</td>${CELLS.map((_,i)=>`<td><input type="number" step="any" data-rv="${m.id}" data-i="${i}" value="${v[i]??''}"></td>`).join('')}</tr>`}).join('')).join('');
+}
+function openRvEdit(id){
+  const r=id?RV.find(x=>x.id===id):null; rvEditId=r?r.id:null;
+  $('#rvEditH').textContent=r?`${r.name} 고치기`:'➕ 새 경쟁사 넣기';
+  $('#rvName').value=r?r.name:''; const d=new Date(); $('#rvDate').value=r?r.date:`${d.getMonth()+1}/${d.getDate()}`;
+  $('#rvMemo').value=r?r.memo:''; $('#rvPaste').value=''; $('#rvGrid').innerHTML=rvGridHTML(r?r.p:{});
+  $('#rvDel').hidden=!r; $('#rvEdit').hidden=false; $('#vsView').hidden=true; $('#vsEmpty').hidden=true;
+  $('#rvEdit').scrollIntoView({behavior:'smooth'});
+}
+function closeRvEdit(){ $('#rvEdit').hidden=true; renderVs(); }
+function fillFromText(txt){
+  const r=parseRival(txt), n=Object.keys(r.p).length;
+  if(!n){toast('읽을 수 있는 줄이 없어요. 글을 다시 확인해 주세요');return}
+  if(r.name&&!$('#rvName').value.trim()) $('#rvName').value=r.name; else if(r.name) $('#rvName').value=r.name;
+  if(r.date) $('#rvDate').value=r.date;
+  if(r.memo.length) $('#rvMemo').value=r.memo.join('\n');
+  const cur={}; $$('#rvGrid input').forEach(inp=>{(cur[inp.dataset.rv]=cur[inp.dataset.rv]||[])[+inp.dataset.i]=inp.value===''?null:+inp.value});
+  Object.assign(cur,r.p); $('#rvGrid').innerHTML=rvGridHTML(cur);
+  toast(`${n}개 기종을 채웠어요`+(r.skip.length?` · 못 읽은 줄 ${r.skip.length}개`:''));
+  if(r.skip.length) console.log('못 읽은 줄',r.skip);
+}
+$('#rvParse').onclick=()=>fillFromText($('#rvPaste').value);
+$('#rvClip').onclick=async()=>{try{const t=await navigator.clipboard.readText(); $('#rvPaste').value=t; fillFromText(t);}catch(e){toast('붙여넣기 칸을 길게 눌러 붙여 넣은 뒤 "글 읽어서 채우기"를 눌러 주세요')}};
+$('#rvCancel').onclick=closeRvEdit;
+$('#rvSave').onclick=()=>{
+  const p={}; $$('#rvGrid input').forEach(inp=>{const v=inp.value.trim(); (p[inp.dataset.rv]=p[inp.dataset.rv]||[null,null,null,null,null,null])[+inp.dataset.i]=v===''?null:+v});
+  Object.keys(p).forEach(k=>{if(p[k].every(v=>v==null)) delete p[k]});
+  if(!Object.keys(p).length){toast('숫자가 하나도 없어요');return}
+  const name=$('#rvName').value.trim()||'경쟁사', date=$('#rvDate').value.trim(), memo=$('#rvMemo').value.trim();
+  if(rvEditId){Object.assign(RV.find(x=>x.id===rvEditId),{name,date,memo,p})}
+  else{rvEditId='r'+Date.now(); RV.unshift({id:rvEditId,name,date,memo,p})}
+  rvCur=rvEditId; saveRV(); toast('저장했어요'); closeRvEdit();
+};
+$('#rvDel').onclick=()=>{ if(!rvEditId||!confirm('이 경쟁사 자료를 지울까요?')) return; RV=RV.filter(x=>x.id!==rvEditId); rvCur=RV[0]?.id||null; saveRV(); closeRvEdit(); };
+$('#vsEditBtn').onclick=()=>openRvEdit(rvCur);
+$$('#vsMode button').forEach(b=>b.onclick=()=>{vsMode=b.dataset.v;LS.set('dsd_vs_mode',vsMode);renderVs()});
+function ourPrice(c,mid,t){
+  const q=quote(c,mid,t); if(!q) return null;
+  if(vsMode==='min') return quote(c,mid,t,{disc:q.o.total}).price;
+  return showPrice(q.price);
+}
+function renderVs(){
+  $('#rvChips').innerHTML=RV.map(r=>`<button data-r="${r.id}" class="${r.id===rvCur?'on':''}">${esc(r.name)} ${esc(r.date||'')}</button>`).join('')+`<button data-r="+">➕ 새 경쟁사</button>`;
+  $$('#rvChips button').forEach(b=>b.onclick=()=>{ if(b.dataset.r==='+') return openRvEdit(null); rvCur=b.dataset.r; saveRV(); $('#rvEdit').hidden=true; renderVs(); });
+  if(!$('#rvEdit').hidden) return;
+  const r=RV.find(x=>x.id===rvCur)||RV[0]; if(r) rvCur=r.id;
+  $('#vsEmpty').hidden=!!r; $('#vsView').hidden=!r; if(!r) return;
+  $$('#vsMode button').forEach(b=>b.classList.toggle('on',b.dataset.v===vsMode));
+  $('#vsModeHint').innerHTML=vsMode==='min'
+    ? '우리 가격 = 본사 단가를 손님께 <b>전부</b> 줬을 때 · 칸 아래 숫자 = <b>상대 가격에 맞추면 나한테 남는 돈</b>'
+    : `우리 가격 = 지금 가격표 (내 이익 ${S.basis==='margin'?`이동 ${S.mgM}만·기변 ${S.mgG}만`:'설정값'}) · 칸 아래 숫자 = <b>우리가 더 싼 금액</b>`;
+  const TH=vsMode==='min'?3:1, cells=[], groups=[...new Set(D.models.filter(m=>r.p[m.id]).map(m=>m.group))];
+  let rows='';
+  groups.forEach(g=>{
+    rows+=`<tr class="g"><td>${esc(g)}</td>${CARR.map(()=>'<td>이동</td><td>기변</td>').join('')}</tr>`;
+    D.models.filter(m=>m.group===g&&r.p[m.id]).forEach(m=>{
+      rows+=`<tr><td class="m">${esc(shortName(m))}<small>출고 ${f1(release(m))}만</small></td>`+CELLS.map(([c,t],i)=>{
+        const rv=r.p[m.id][i], us=ourPrice(c,m.id,t);
+        if(rv==null&&us==null) return '<td class="N">–</td>';
+        if(rv==null) return `<td class="N">상대 없음<br>우리 ${f1(us)}</td>`;
+        if(us==null) return `<td class="N"><b style="color:#888">${f1(rv)}</b>우리 없음</td>`;
+        const gap=Math.round((rv-us)*10)/10, cls=gap>=TH?'W':(gap>=(vsMode==='min'?0:-TH+0.01)?'T':'L');
+        cells.push({m,c,t,rv,us,gap,cls});
+        return `<td class="${cls}"><b>${f1(rv)}</b><i>우리 ${f1(us)}</i><u>${gap>0?'+':''}${f1(gap)}</u></td>`;
+      }).join('')+'</tr>';
+    });
+  });
+  const cnt=k=>cells.filter(x=>x.cls===k).length, TN=t=>t==='MNP'?'이동':'기변';
+  $('#vsSum').innerHTML=vsMode==='min'
+    ? `<div class="w"><b>${cnt('W')}</b>맞춰도 3만↑ 남음</div><div class="t"><b>${cnt('T')}</b>0~3만 남음</div><div class="l"><b>${cnt('L')}</b>이익 0원도 비쌈</div>`
+    : `<div class="w"><b>${cnt('W')}</b>우리가 쌈</div><div class="t"><b>${cnt('T')}</b>비슷</div><div class="l"><b>${cnt('L')}</b>상대가 쌈</div>`;
+  const top=(arr)=>arr.map(x=>`<li><b>${esc(shortName(x.m))} ${x.c} ${TN(x.t)}</b> 우리 ${f1(x.us)} · 상대 ${f1(x.rv)} → <b style="color:${x.gap>=0?'#14833B':'#C62828'}">${x.gap>=0?'+':''}${f1(x.gap)}만</b></li>`).join('');
+  const best=cells.filter(x=>x.gap>0).sort((a,b)=>b.gap-a.gap).slice(0,5), worst=cells.filter(x=>x.gap<0).sort((a,b)=>a.gap-b.gap).slice(0,5);
+  $('#vsList').innerHTML=(best.length?`<h5>💪 우리 강점 (홍보하기 좋은 것)</h5><ul>${top(best)}</ul>`:'')+(worst.length?`<h5>⚠️ 상대 강점 (문의로 받기)</h5><ul>${top(worst)}</ul>`:'');
+  const lg=vsMode==='min'
+    ? '<span class="W" style="background:#DFF5E3">초록</span>맞춰도 3만↑ 남음 <span style="background:#FFF6CC">노랑</span>0~3만 <span style="background:#FDE2E1">빨강</span>이익 0원도 비쌈'
+    : '<span style="background:#DFF5E3">초록</span>우리가 1만↑ 쌈 <span style="background:#FFF6CC">노랑</span>비슷 <span style="background:#FDE2E1">빨강</span>상대가 쌈';
+  $('#vsBoard').innerHTML=`<div class="vb-h"><h2>⚔️ ${esc(r.name)} ${esc(r.date||'')} vs 다쏜다</h2><p>큰 숫자 = 상대 · 작은 숫자 = 우리(${vsMode==='min'?'이익 0원 최저가':'지금 가격표'}) · 할부원금 만원 · ${S.ct==='공시'?'공통지원금':'선택약정'} 기준 · 자료 ${D.received.slice(5).replace('-','/')}</p></div>
+    <table class="vbt"><tr><th></th>${CARR.map(c=>`<th colspan="2">${c}</th>`).join('')}</tr>${rows}</table>
+    <div class="vb-f"><div class="lg">${lg}</div>${r.memo?`<div class="memo">상대 조건: ${esc(r.memo)}</div>`:''}<div style="margin-top:4px">※ KT·LG 공통지원금을 모르는 기종은 ${D.defaultSubsidy.KT}만으로 계산했어요(⚙️ 설정에서 수정).</div></div>`;
+  fitVs();
+}
+function fitVs(){ const w=$('#vsWrap').clientWidth||360, s=Math.min(1,w/720), p=$('#vsBoard'); p.style.transform=`scale(${s})`; $('#vsWrap').style.height=(p.offsetHeight*s)+'px'; }
+window.addEventListener('resize',()=>{ if(!$('[data-p=vs]').hidden) fitVs(); });
+$('#vsSave').onclick=async()=>{
+  if(typeof html2canvas==='undefined'){toast('이미지 도구를 못 불러왔어요. 화면을 캡처해 주세요');return}
+  const p=$('#vsBoard'), t=p.style.transform, r=RV.find(x=>x.id===rvCur);
+  try{ await (document.fonts?.ready||Promise.resolve()); p.style.transform='none';
+    const cv=await html2canvas(p,{scale:2,backgroundColor:'#ffffff',width:720,windowWidth:760}); p.style.transform=t;
+    const blob=await new Promise(res=>cv.toBlob(res,'image/png')), name=`비교_${(r?.name||'경쟁사').replace(/[\\/:*?"<>|\s]/g,'')}_${(r?.date||'').replace(/\//g,'')}.png`, file=new File([blob],name,{type:'image/png'});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:'경쟁사 비교'});return}
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();toast('이미지를 저장했어요');
+  }catch(e){p.style.transform=t; if(e.name!=='AbortError') toast('저장이 안 되면 화면을 캡처해 주세요')}
+};
+
 /* ---------- 탭 ---------- */
 $$('.tabs button').forEach(b=>b.onclick=()=>{
   $$('.tabs button').forEach(x=>x.classList.toggle('on',x===b));
   $$('[data-p]').forEach(s=>s.hidden=s.dataset.p!==b.dataset.t);
   if(b.dataset.t==='poster') requestAnimationFrame(fitPoster);
+  if(b.dataset.t==='vs') requestAnimationFrame(()=>{renderVs();fitVs()});
   if(b.dataset.t==='box') renderBox();
   window.scrollTo(0,0);
 });
-function renderAll(keepSettings){ renderPick(); renderRecs(); renderPoster(); renderRaw(); if(!keepSettings) renderSettings(); }
+function renderAll(keepSettings){ renderPick(); renderRecs(); renderPoster(); renderRaw(); renderVs(); if(!keepSettings) renderSettings(); }
 
 /* 테스트용 */
 window.__dsdCode=v=>{CODEVIEW=!!v;renderPoster();};
